@@ -71,6 +71,7 @@ static const Layout layouts[] = {
 // my stuff
 #define _dwm_path "$HOME/workspace/outros/dotfiles/data/suckless-tools/"
 #define _dwm_function(fname) SHCMD("cat "_dwm_path"functions.sh | bash -s "fname)
+#define scripts_bin_func(fname) ESHCMD("/usr/bin/python $HOME/.scripts/bin/"fname)
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
@@ -84,11 +85,10 @@ static Key keys[] = {
     // cmds
     {  MODKEY,  XK_p,       spawn,  {.v  =  dmenucmd  }  },
     {  MODKEY,  XK_Return,  spawn,  {.v  =  termcmd   }  },
-    {  MODKEY|ShiftMask,  XK_a,      spawn,  _dwm_function("_toggle_audio_output")  },
-    {  MODKEY|ShiftMask,  XK_x,      spawn,  _dwm_function("_simple_lock")          },
-    {  MODKEY,            XK_g,      spawn,  _dwm_function("_play_ytmpv")           },
-    {  MODKEY,            XK_Print,  spawn,  _dwm_function("_screenshooter")       },
-    {  MODKEY,            XK_Insert,  spawn,  ESHCMD("clipmenu")       },
+    {  MODKEY|ShiftMask,  XK_a,      spawn,  scripts_bin_func("toggle-audio-output.py") },
+    {  MODKEY|ShiftMask,  XK_x,      spawn,  scripts_bin_func("screen-lock.py")          },
+    {  MODKEY,            XK_Print,  spawn,  ESHCMD("gnome-screenshot --interactive")       },
+    {  MODKEY,            XK_Insert, spawn,  ESHCMD("clipmenu")       },
     {  0,                 XF86XK_AudioPlay,  spawn,  ESHCMD("mpc toggle")  },
     {  0,                 XF86XK_AudioStop,  spawn,  ESHCMD("mpc stop")  },
     {  0,                 XF86XK_AudioNext,  spawn,  ESHCMD("mpc next")  },

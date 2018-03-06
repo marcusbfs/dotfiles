@@ -39,6 +39,15 @@ bashtemplate(){
 EOF
     chmod +x $file
 }
+pythontemplate(){
+    file="$1"; [ -f $file ] && echo "file already exists" && return 1
+    cat << EOF > $file
+#!/usr/bin/env python
+
+
+EOF
+    chmod +x $file
+}
 # =============================================================================
 
 # Utilidades===================================================================
