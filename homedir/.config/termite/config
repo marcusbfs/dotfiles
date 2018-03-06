@@ -1,0 +1,64 @@
+[options]
+resize_grip = false
+scroll_on_output = false
+scroll_on_keystroke = true
+audible_bell = false
+mouse_autohide = false
+allow_bold = true
+dynamic_title = true
+urgent_on_bell = true
+clickable_url = true
+#font = Tamzen 13
+font = monospace 11
+#font = Yanc YancFont 14
+#font = Inconsolata 15
+#font = Hack 13
+scrollback_lines = 10000
+search_wrap = true
+browser = firefox
+
+cursor_blink = false
+cursor_shape = block
+
+#[colors]
+#
+##transparency = 0.9
+##background = rgba(16, 16, 16, 0.7)
+##foreground = #e6e6e6
+##background = rgba(63, 63, 63, 0.8)
+##foreground = #3f3f3f
+#foreground_bold = #ffffff
+#cursor =  #ffaa3e
+#highlight = #585858
+#
+## Black
+#color0 = #0d1926
+#color8 = #585858
+#
+## Red
+#color1 = #c0392b
+#color9 = #e74c3c
+#
+## Green
+#color2 = #3aaf75
+#color10 = #72d5a3
+#
+## Yellow
+#color3 = #ffaa3e
+#color11 = #efdd6f
+#
+## Blue
+#color4 = #2980b9
+#color12 = #3498db
+#
+## Magenta
+#color5 = #8e44ad
+#color13 = #9b59b6
+#
+## Cyan
+#color6 = #00afff
+#color14 = #4DC5DC
+#
+## White
+#color7 = #b3b3b3
+#color15 = #e6e6e6

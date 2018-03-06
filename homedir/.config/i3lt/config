@@ -1,0 +1,339 @@
+# cat << EOF > /dev/null
+# Configuração i3 (gaps) - Marcus Bruno
+# www.github.com/mrcsbrn/dotfiles
+set $mod Mod4
+
+###--- i3-gaps ---###
+hide_edge_borders both
+for_window [class="^.*"] "border pixel 1"
+set $gi 8
+set $go 5
+gaps inner $gi
+gaps outer $go
+set $mode_gaps Toggle gaps: (1) on (2) off
+bindsym $mod+F11 mode "$mode_gaps"
+mode "$mode_gaps" {
+  bindsym 1 mode "default", gaps inner all set $gi, gaps outer all set $go
+  bindsym 2 mode "default", gaps inner all set 1, gaps outer all set 1
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+smart_gaps on
+smart_borders on
+
+###--- Cores ---###
+set_from_resource $base00 color0  #000000
+set_from_resource $base01 color18 #000000
+set_from_resource $base02 color19 #000000
+set_from_resource $base03 color8  #000000
+set_from_resource $base04 color20 #000000
+set_from_resource $base05 color7  #000000
+set_from_resource $base06 color21 #000000
+set_from_resource $base07 color15 #000000
+set_from_resource $base08 color1  #000000
+set_from_resource $base09 color16 #000000
+set_from_resource $base0A color11 #000000
+set_from_resource $base0B color2  #000000
+set_from_resource $base0C color14 #000000
+set_from_resource $base0D color12 #000000
+set_from_resource $base0E color5  #000000
+set_from_resource $base0F color17 #000000
+#                       class   border  backgr. text indicator
+client.focused          $base05 $base05 $base00 $base05
+client.focused_inactive $base02 $base02 $base05 $base02
+client.unfocused        $base02 $base02 $base05 $base00
+client.urgent $base01 $base01 $base05 $base00
+
+###--- Configurações básicas ---###
+floating_modifier $mod
+set $term urxvt
+set $browser firefox
+set $flash --no-startup-id "cut -c3- $HOME/.config/i3/config | bash -s _blink_window"
+font pango:Monospace, DejaVu Sans Mono 12
+
+###--- Inicialização ---###
+exec_always --no-startup-id "cut -c3- $HOME/.config/i3/config | bash -s _xmanager"
+exec_always --no-startup-id feh --bg-scale ~/.config/wall.jpg
+exec_always --no-startup-id "cut -c3- $HOME/.config/i3/config | bash -s _polybar_launcher"
+exec --no-startup-id setxkbmap -model abnt2 -layout br -option 'caps:ctrl_modifier'
+exec --no-startup-id xcape -e 'Caps_Lock=Escape'
+# https://github.com/olemartinorg/i3-alternating-layout
+exec --no-startup-id $HOME/.scripts/bin/alternating_layouts.py
+exec --no-startup-id nm-applet
+exec --no-startup-id mpd
+exec --no-startup-id transmission-daemon
+exec --no-startup-id udiskie -2 -t
+exec --no-startup-id synergyc 192.168.1.106
+exec --no-startup-id xfce4-power-manager
+exec --no-startup-id redshift-gtk
+exec --no-startup-id dropbox start
+# Remove "system bell"
+exec --no-startup-id xset -b
+exec --no-startup-id xset s off
+exec --no-startup-id xset -dpms
+exec --no-startup-id xset s noblank
+exec --no-startup-id synclient VertScrollDelta=-100
+# Esconde cursor
+exec --no-startup-id unclutter --timeout 2
+
+
+###--- Scripts shortcuts ---###
+exec --no-startup-id "cut -c3- $HOME/.config/i3/config | bash -s _compton_launcher"
+# Script que sincroniza zshrc e ranger.rc
+exec_always --no-startup-id python $HOME/.scripts/syncaf.py
+
+
+###--- Shortcuts ---###
+bindsym $mod+Return exec $term
+bindsym $mod+m exec $term -e ncmpcpp
+bindsym $mod+Shift+Return exec $term -e tmux
+bindsym $mod+Tab workspace back_and_forth
+
+# Testes com dois monitores
+bindsym $mod+Shift+m move workspace to output left
+
+# Atalhos com letras
+bindsym $mod+Shift+Print exec --no-startup-id screenkey
+bindsym $mod+Print exec --no-startup-id "cut -c3- $HOME/.config/i3/config | bash -s _screenshooter"
+bindsym $mod+a exec --no-startup-id "wine $HOME/workspace/outros/dotfiles/data/Flat50G/Calculator/Emu48.exe"
+bindsym $mod+x exec emacs
+bindsym $mod+Shift+x exec --no-startup-id "cut -c3- $HOME/.config/i3/config | bash -s _simple_lock"
+bindsym $mod+p exec $flash
+bindsym $mod+g exec --no-startup-id "cut -c3- $HOME/.config/i3/config | bash -s _play_ytmpv"
+
+bindsym $mod+Shift+y resize shrink width 10 px or 10ppt
+bindsym $mod+Shift+u resize grow height 10 px or 10 ppt
+bindsym $mod+Shift+i resize shrink height 10 px or 10 ppt
+bindsym $mod+Shift+o resize grow width 10 px or 10 ppt
+
+bindsym $mod+Shift+q kill
+bindsym $mod+q kill
+
+# Atalhos F1-F12
+bindsym $mod+F3 exec --no-startup-id arandr
+bindsym $mod+F7 exec transset-df -a --dec .15
+bindsym $mod+F8 exec transset-df -a --inc .15
+
+# rofi
+bindsym $mod+d exec rofi -show run -show-icons -matching fuzzy
+
+# change focus
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# move focused window
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+bindsym $mod+v split toggle
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+#bindsym $mod+a focus parent
+
+# focus the child container
+#bindsym $mod+d focus child
+
+###--- Workspaces ---###
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws0 "10"
+
+###--- Regras ---###
+for_window [class="Arandr"] "floating enable"
+for_window [class="mpv"] "floating enable"
+for_window [class="^Firefox$"] "border none"
+for_window [class="^Vlc$"] "border none,focus"
+# Abrir em tal container
+assign [class="^Firefox$"] $ws2
+assign [class="^Vlc$"] $ws3
+
+# switch to workspace
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws0
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws0
+
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+
+###--- Controle de áudio ---###
+# Alsa
+bindsym $mod+shift+a exec --no-startup-id "cut -c3- $HOME/.config/i3/config | bash -s _toggle_audio_output"
+bindsym XF86AudioRaiseVolume exec --no-startup-id  "pactl set-sink-volume 1 +5%"
+bindsym XF86AudioLowerVolume exec --no-startup-id  "pactl set-sink-volume 1 -5%"
+bindsym XF86AudioMute exec --no-startup-id "pactl set-sink-mute 1 toggle"
+bindsym XF86AudioPlay exec --no-startup-id "mpc toggle"
+bindsym XF86AudioStop exec --no-startup-id "mpc stop"
+bindsym XF86AudioNext exec --no-startup-id "mpc next"
+bindsym XF86AudioPrev exec --no-startup-id "mpc prev"
+
+# Controle de brilho: depende de xbacklight
+bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
+bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
+# Caso a opção acima não funcione; depende de light-git (AUR)
+#bindsym XF86MonBrightnessUp exec --no-startup-id light -A 10
+#bindsym XF86MonBrightnessDown exec --no-startup-id light -U 10
+
+# EOF
+# # cat << EOF > /dev/null # < devo colocar essa linha no topo!
+#
+# _blink_window(){
+#   val=0.4
+#   slp=0.1
+#   num=2
+#   for i in $(seq 1 $num); do
+#       transset-df -a --dec $val && sleep $slp && transset-df -a --inc $val
+#       sleep $slp
+#   done
+# }
+#
+# _xmanager(){
+#   xdflts=$(realpath ~/.Xdefaults)
+#   xrsrcs=$(realpath ~/.Xresources)
+#   if [ -f $xdflts ]; then
+#       xrdb -load $xdflts
+#       echo "Xdefaults loaded"
+#   fi
+#   if [ -f $xrsrcs ]; then
+#       xrdb -merge $xrsrcs
+#       echo "Xresources merged"
+#   fi
+# }
+#
+# _polybar_launcher(){
+#   # Terminate already running bar instances
+#   killall -q polybar
+#   # Wait until the processes have been shut down
+#   while pgrep -x polybar >/dev/null; do sleep 1; done
+#   # Launch bar1 and bar2
+#   polybar Bar -c $HOME/.config/i3/polybar/config -q &
+# }
+#
+# _compton_launcher(){
+#   killall -q compton
+#   while pgrep -x compton >/dev/null; do sleep 1; done
+#   sleep 0.2 && compton --config $HOME/.config/i3/compton.conf &
+# }
+#
+# _toggle_audio_output(){
+#   toggle_config=/tmp/.audio_output_toggle
+#   if [[ ! -e "$toggle_config" ]]; then
+#       # Muda pro audio hdmi
+#       pacmd set-default-sink 0
+#       for index in `pacmd list-sink-inputs | grep "^\s*index" | sed -e "s/[^0-9]//g"`; do
+#           pacmd move-sink-input $index 0;
+#       done
+#       touch "$toggle_config"
+#   else
+#       # Muda pro audio do headphone
+#       pacmd set-default-sink 1
+#
+#       for index in `pacmd list-sink-inputs | grep "^\s*index" | sed -e "s/[^0-9]//g"`; do
+#           pacmd move-sink-input $index 1;
+#       done
+#       rm "$toggle_config"
+#   fi
+# }
+#
+# _simple_lock(){
+#   if which betterlockscreen >/dev/null 2>&1; then
+#       betterlockscreen -l dim
+#   else
+#       lock_img=~/.config/i3/nlock.png
+#       imgpath=/tmp/i3screenshot.png
+#       scrot --silent $imgpath
+#       convert $imgpath -blur 0x3 $imgpath
+#       if [[ -f $lock_img ]]; then
+#           convert $imgpath $lock_img \
+#               -gravity center -composite -matte \
+#               $imgpath
+#       fi
+#       i3lock -i $imgpath && rm $imgpath
+#   fi
+# }
+#
+# _screenshooter(){
+#   if which gnome-screenshot >/dev/null 2>&1; then
+#       gnome-screenshot --interactive
+#   elif which gscreenshot >/dev/null 2>&1; then
+#       gscreenshot
+#   else
+#       echo "install gnome-screenshot or gscreenshot"
+#       return 1
+#   fi
+# }
+#
+# _play_ytmpv(){
+#   # preciso estar com o link copiado
+#   if which xsel >/dev/null 2>&1; then
+#       selectedtext=$(xsel -o -b)
+#   elif which xclip >/dev/null 2>&1; then
+#       selectedtext=$(xclip -o -selection clipboard)
+#   else
+#       echo "install xsel or xclip"
+#       return 1
+#   fi
+#   tsp mpv --ontop --no-border --volume=50 --force-window --autofit=600x380 --geometry=-15-15 "$selectedtext"
+# }
+#
+# # ======== o comando abaixo é necessário
+# "$@"

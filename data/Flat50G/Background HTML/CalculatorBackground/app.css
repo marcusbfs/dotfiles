@@ -1,0 +1,137 @@
+﻿:root {
+  --button-main-background: #000;
+  --button-right-shift:  rgb(210,70,40);
+  --button-left-shift: #BBBBBB;
+  --button-alpha: #FEDE06;
+  --calculator-background: #DFDFDF;
+}
+
+body {
+    margin: 0px;
+}
+
+td {
+  width: 33px;
+  padding:0px;
+}
+
+.tall {
+    width: 202px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+
+.wide .function{
+    width:41px;
+}
+
+
+.screen{
+  font-family:arial;
+  background-color:var(--calculator-background);
+}
+
+.shortcuts{
+    width: 100%;
+
+}
+
+.shortcuts td{
+        text-align:left;
+        font-size:5px;
+        vertical-align: middle;
+}
+
+.shortcuts th{
+    font-size:9px;
+}
+
+.shortcuts td:nth-child(even){
+    font-weight:bold;
+    font-size: 5.5px;
+}
+
+.shortcuts td:nth-child(odd){
+    font-size:6.5px;
+}
+
+
+.alphashift{
+  background-color:var(--button-alpha) !important;
+}
+
+.alphashift .main{
+    color:var(--button-main-background) !important;
+}
+
+.alphashift .left{
+    color:var(--button-left-shift);
+}
+
+.leftshift{
+  background-color:var(--button-right-shift) !important;
+  color:var(--button-main-background) !important;
+  font-size: 12px !important;
+}
+
+.rightshift{
+  background-color:var(--button-left-shift) !important;
+  color:var(--button-main-background) !important;
+  font-size: 12px !important;
+}
+
+.button {
+  background-color: var(--button-main-background);
+  border-radius: 0px;
+  position: relative;
+  text-align:center;
+
+    margin: 0.75px;
+  }
+
+.button .main {
+  font-size: 9px;
+  font-family: arial;
+  height: 29px;
+  
+  color: #fff;
+  display: table-cell;
+  vertical-align: middle;
+
+  width: 10%;
+  margin: 0 auto;
+}
+
+.button .sub {
+  font-size:5.5px;
+  font-family: arial;
+  padding: 1px;
+}
+
+.button .left {
+  color: var(--button-left-shift);
+  position: absolute;
+  left: 0;
+  margin-left:0.5px;
+}
+
+.button .right {
+  color: var(--button-right-shift);
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin-right:0.5px;
+}
+
+.button .alpha {
+  color: var(--button-alpha);
+  position: absolute;
+  right: 0;
+  margin-right:0.5px;
+}
+
+
+.user {
+    color: #808080 !important; /* tag on alpha button can be different colour to improve visiblity */
+}

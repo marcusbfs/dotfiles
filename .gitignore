@@ -1,0 +1,15 @@
+homedir/.config/ranger/history
+*.swp*
+*/.config/ranger/bookmarks
+*/.config/ranger/history
+*/.config/mpd/log*
+*/.config/mpd/pid
+*/.config/mpd/database
+*/.config/mpd/state
+*/.config/mpdlt/log*
+*/.config/mpdlt/pid
+*/.config/mpdlt/database
+*/.config/mpdlt/state
+*/.w3m/*tmp*
+*/.w3m/cookie
+*/.w3m/history

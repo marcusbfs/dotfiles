@@ -1,0 +1,91 @@
+export DOTFILES_ZSH=~/workspace/outros/dotfiles/data/zsh
+
+source $DOTFILES_ZSH/preconfigs.zsh
+
+autoload -U compinit && compinit        # enable autocompletion
+fpath+=($DOTFILES_ZSH/completion.zsh)              # set path to custom autocompletion
+fpath=($DOTFILES_ZSH/zsh-completions/src $fpath) # set path to custom autocompletion
+zstyle ':completion:*' menu select      # to activate the menu, press tab twice
+#unsetopt menu_complete                  # do not autoselect the first completion entry
+#setopt completealiases                  # autocompletion CLI switches for aliases
+zstyle ':completion:*' list-colors ''   # show colors on menu completion
+#setopt complete_in_word                 # tab completion from both ends
+#setopt glob_complete                    # wildcard completion eg. *-tar
+expand-or-complete-with-dots() {
+  echo -n "\e[31m......\e[0m"
+  zle expand-or-complete
+  zle redisplay
+}
+zle -N expand-or-complete-with-dots
+bindkey "^I" expand-or-complete-with-dots
+
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z-_}={A-Za-z_-}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*:killall:*' command 'ps -u $USER -o cmd'
+zstyle ':completion:*' rehash true
+
+
+export DISPLAY=:0
+export LANG=pt_BR.UTF-8
+export LC_ALL=pt_BR.UTF-8
+export OPENER=$(which xdg-open)
+export VISUAL=$(which vim)
+export EDITOR="$VISUAL"
+export MUSICER=$(which cmus)
+export BROWSER=$(which qutebrowser)
+export BROWSERCLI=$(which w3m)
+export PLAYER=$(which mpv)
+export READER=$(which mupdf)
+export MANPAGER="/bin/bash -c \"col -b | vim --not-a-term -c 'set ft=man ts=8 nomod nolist noma' -\""
+
+# sources
+source $DOTFILES_ZSH/async.zsh
+source $DOTFILES_ZSH/pure.zsh  # depende de async
+#source $DOTFILES_ZSH/prompt.zsh
+source $DOTFILES_ZSH/functions.zsh  # Minhas funções
+source $DOTFILES_ZSH/keybindings.zsh
+
+# Meus alias
+alias cd="cl"
+alias tmux="tmux -2"
+alias tmx="tmux"
+alias tmxl="tmux list-sessions"
+alias tmxk="tmux kill-session -t"
+alias tmxa="tmux a -t"
+alias tmxn="tmux new-session"
+alias grep="grep --color=auto"
+alias ..="cd .."
+alias ..2="cd ../.."
+alias ..3="cd ../../.."
+alias sv="sudo $EDITOR"
+alias pls='sudo $(fc -ln -1)'
+alias ga="git add --all"
+alias gs="git status"
+alias gc="git commit -m"
+alias gpush="git push origin master"
+alias gpull="git pull origin master"
+alias duhs="du -hs"
+alias df="df -hT"
+alias free="free -h"
+alias cEspu="cEsp -u -c all"
+alias ref="sudo reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist"
+alias bf="bigfiles"
+alias r="ranger"
+alias ytmpv="mpv --ontop --no-border --volume=50 --force-window --autofit=600x380 --geometry=-15-15"
+alias ytdlhq="youtube-dl -f bestvideo+bestaudio"
+alias svh="sudo $EDITOR /etc/hosts"
+alias wine-maple="wine ~/.wine/drive_c/Program\ Files/Maple\ 17/bin.X86_64_WINDOWS/maplew.exe"
+alias wine-steam="wine ~/.wine/drive_c/Program\ Files\ \(x86\)/Steam/Steam.exe -no-cef-sandbox"
+
+# Iniciar com tmux
+if [[ -z $TMUX ]] && pgrep X >/dev/null 2>&1; then
+    if ! tmux list-sessions | grep -w 'base.*attached' 2>&1 >/dev/null ; then
+        tmux attach -t base || tmux new-session -s base -c ~/workspace
+    fi
+fi
+
+# Plugins
+source $DOTFILES_ZSH/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $DOTFILES_ZSH/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+
+# =============================================================================

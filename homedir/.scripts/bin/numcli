@@ -1,0 +1,225 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+from __future__ import division, print_function, absolute_import
+
+import argparse
+import numpy as np
+import sympy as sp
+
+
+def main():
+
+    I = None
+
+    parser = argparse.ArgumentParser()
+    group = parser.add_mutually_exclusive_group()
+
+    group.add_argument(
+        '-i',
+        '--integral',
+        help="evaluates the integral of the function from 'ua' \
+                       to 'ub' if give, else evaluates indefinite",
+        nargs='*')
+
+    group.add_argument(
+        '-d',
+        '--diff',
+        dest='diff',
+        help="diff. function with respect to VAR",
+        metavar='VAR',
+        nargs='*')
+
+    group.add_argument(
+        '-r',
+        '--root',
+        help="find the root of the function \
+                       with 'ua' as initial guess",
+        type=float,
+        nargs='*')
+
+    group.add_argument(
+        '-s', dest='seq', help="solves system of equations", nargs=2)
+
+    group.add_argument('--ode', dest='ode', help="Solves a ODE", nargs=1)
+
+    group.add_argument(
+        '-p',
+        '--plot',
+        help="plot the function over the interval ['ua', 'ub']",
+        type=float,
+        nargs=2)
+
+    parser.add_argument("function", help="given function", type=str)
+
+    parser.add_argument(
+        '-var',
+        '--variable',
+        help="variable name of 'us' function",
+        type=str,
+        default=['x'],
+        nargs=1)
+
+    parser.add_argument(
+        "-tol",
+        "--tolerance",
+        help="tolerane for the aproximation",
+        type=float,
+        default=[1e-08],
+        nargs=1)
+
+    args = parser.parse_args()
+
+    var = args.variable[0]
+    tol = args.tolerance[0]
+
+    us = args.function
+
+    if args.seq is not None:
+        eqs = us.split(',')  # equations
+        IG = args.seq[1].split(',')  # initial guesses
+        vs = args.seq[0].split(',')  # variables
+        n = len(eqs)  # number of equations
+
+        for i in range(n):
+            vs[i] = sp.symbols(vs[i])
+            IG[i] = sp.sympify(IG[i]).evalf()
+        for i in range(n):
+            eqs[i] = sp.sympify(equalsign(eqs[i]))
+
+        IG = np.array(IG, dtype='float64')
+        eqs = np.array(eqs)
+        system = sp.lambdify(vs, eqs, 'numpy')
+        stm = lambda x: system(*x)
+
+        from scipy.optimize import root as rt
+
+        I = rt(stm, IG, tol=tol)
+        if I.status == 1:
+            residual = np.linalg.norm(I.fun)
+            for i in range(n):
+                sp.pprint(sp.Eq(vs[i], I.x[i]))
+            print('residual:', residual)
+        else:
+            print(I.message)
+
+        return
+
+    if args.ode is not None:
+
+        indpvar = sp.symbols(args.ode[0][2:-1])
+        n = len(args.ode)
+
+        eq = sp.sympify(equalsign(us))
+        sol = sp.dsolve(eq, sp.sympify(args.ode[0]))
+        sp.pprint(sol)
+
+        return
+
+    us = equalsign(us)
+
+    if args.root is not None:
+        if len(args.root) == 0:
+            args.root.append('1.0')
+        elif len(args.root) > 1:
+            raise ValueError('Wrong arguments for root')
+
+    if args.diff is not None:
+        n = len(args.diff)
+        x = sp.symbols(var)
+        eq = sp.sympify(equalsign(us))
+        sol = sp.diff(eq,x)
+        sp.pprint(sol)
+        return
+
+    if args.integral is not None:
+        n_i = len(args.integral)
+
+        if n_i == 0:  # Integral indefinida
+            x = sp.symbols(var)
+            eq = sp.sympify(us).evalf()
+            I = sp.integrate(eq, x)
+            print('\n')
+            sp.pprint(sp.Eq(sp.Integral(eq, x), I))
+            df = input('\ndefinite integral? (Y/n) ').lower()
+            if df in ['', 'y', 's', 'sim', 'yes']:
+                a = sp.sympify(input('a: ')).evalf()
+                b = sp.sympify(input('b: ')).evalf()
+                a = float(a)
+                b = float(b)
+                Id = (I.subs(x, b) - I.subs(x, a)).evalf()
+                sp.pprint(Id)
+            return 0
+
+        elif n_i == 2:
+            ua = str(args.integral[0])
+            ub = str(args.integral[1])
+
+    elif args.root is not None:
+        ua = str(args.root[0])
+        ub = '0.0'
+
+    elif args.plot is not None:
+        ua = str(args.plot[0])
+        ub = str(args.plot[1])
+
+    else:
+        print('option not found')
+        return
+
+    x = sp.symbols(var)
+    a = sp.sympify(ua).evalf()
+    b = sp.sympify(ub).evalf()
+    a = float(a)
+    b = float(b)
+    eq = sp.sympify(us).evalf()
+    f = sp.lambdify(x, eq, 'numpy')
+
+    if args.integral:
+        from scipy.integrate import quad
+        I = quad(f, a, b, epsabs=tol, epsrel=tol)[0]
+        sp.pprint(I)
+        return
+
+    elif args.root:
+        # from scipy.optimize import newton
+        from scipy.optimize import root as rt
+        I = rt(f, a, tol=tol).x
+        print(I)
+        return
+
+    elif args.plot:
+
+        import matplotlib.pyplot as plt
+
+        _h = 0.001
+
+        s_eq = '$' + sp.latex(eq) + '$'
+        _x = np.arange(a, b + _h, _h)
+        _y = f(_x)
+
+        fig, ax = plt.subplots()
+        ax.axhline(0, linestyle='--', color='black', linewidth=.8)
+        ax.plot(_x, _y, color='blue', linewidth=1.5)
+        ax.set_title(s_eq)
+        ax.set_xlabel('$' + sp.latex(x) + '$')
+        ax.set_ylabel('$f(' + sp.latex(x) + ')$')
+        ax.grid()
+        plt.show()
+
+    else:
+        print('option not found')
+        return
+
+    if I:
+        print(I)
+
+
+def equalsign(us):
+    if not '=' in us:
+        return us
+    eq = us.split('=')
+    return eq[0] + '- (' + eq[1] + ')'
+
+
+main()

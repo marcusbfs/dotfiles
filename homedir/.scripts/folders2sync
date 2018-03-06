@@ -1,0 +1,17 @@
+h ~
+ws ~/workspace
+pp ~/Imagens
+pw ~/Imagens/Wallpapers
+m /media/win/Users/Marcus/Desktop/Media/Music
+dl ~/Downloads
+db ~/Dropbox
+u ~/Dropbox/UFLA/UFLA_2018_01
+O ~/workspace/outros
+W /media/win/Users/Marcus/Desktop
+wm /media/win/Users/Marcus/Desktop/Media
+HD /run/media/mrcsbrn/mrcshd
+V /run/media/mrcsbrn/mrcshd/Videos
+D ~/workspace/outros/dotfiles
+cfg ~/.config
+sless ~/workspace/outros/dotfiles/data/suckless-tools
+s ~/.scripts/

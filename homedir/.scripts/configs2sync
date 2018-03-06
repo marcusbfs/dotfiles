@@ -1,0 +1,16 @@
+cf-zshrc ~/.scripts/zshrc.base
+cf-zfunc ~/workspace/outros/dotfiles/data/zsh/functions.zsh
+cf-vimrc ~/.vimrc
+cf-i3 ~/.config/i3/config
+cf-rangerrc ~/.scripts/rc.conf.base
+cf-folders2sync ~/.scripts/folders2sync
+cf-config2sync ~/.scripts/configs2sync
+cf-tmux ~/.tmux.conf
+cf-Xdefaults ~/.Xdefaults
+cf-bspwmrc ~/.config/bspwm/bspwmrc
+cf-sxhkdrc ~/.config/sxhkd/sxhkdrc
+cf-startup-apps ~/.startup-apps
+cf-zprofile ~/.zprofile
+cf-xinitrc ~/.xinitrc
+cf-qutebrowser-confpy ~/.config/qutebrowser/config.py
+cf-spacemacs ~/.spacemacs

@@ -1,0 +1,9 @@
+[color]
+    ui = true
+[user]
+    name = Marcus Bruno
+	email = marcusbfs@gmail.com
+[credential]
+    helper = cache
+[github]
+    user = mrcsbrn

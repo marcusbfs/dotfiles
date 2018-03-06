@@ -1,0 +1,257 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+from __future__ import print_function, division, absolute_import
+
+import os
+import argparse
+import re
+
+vprint = None
+
+
+def main():
+
+    list_of_choices = ["files", "dirs", "all"]
+
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('dir', nargs='?', default=os.getcwd(), help="path")
+
+    parser.add_argument(
+        '-c',
+        '--change',
+        dest='change',
+        nargs=1,
+        default=[list_of_choices[0]],
+        help="rename files, directories or all",
+        choices=list_of_choices)
+
+    parser.add_argument(
+        '-r', dest='R', help="recursive action", action="store_true")
+
+    parser.add_argument(
+        '-b', dest='brackets', help="remove brackets", action="store_true")
+
+    parser.add_argument(
+        '-i',
+        '--ignore',
+        dest="ignore",
+        default=[],
+        help="ignore dirs",
+        nargs='+')
+
+    parser.add_argument(
+        '-u',
+        '--UTF',
+        dest='UTF',
+        help="subs. UTF-8 chars",
+        action="store_true")
+
+    parser.add_argument(
+        '-d', '--dots', dest='dots', help="replace dots", action="store_true")
+
+    parser.add_argument(
+        '-q',
+        '--quiet',
+        dest='quiet',
+        help="no verbosity",
+        action="store_true")
+
+    args = parser.parse_args()
+
+    global vprint
+    if not args.quiet:
+        vprint = lambda *args, **kwargs: print(*args, **kwargs)
+    else:
+        vprint = lambda *args, **kwargs: None
+
+    fix_filenames(
+        cpath=args.dir,
+        change=args.change[0],
+        change_dots=args.dots,
+        change_brackets=args.brackets,
+        recursive=args.R,
+        ignore=args.ignore,
+        rmUTF=args.UTF)
+
+
+def fix_filenames(cpath='.',
+                  change='files',
+                  recursive=False,
+                  ignore=[],
+                  change_dots=False,
+                  change_brackets=False,
+                  rmUTF=False):
+    """Arruma os nome dos arquivos
+
+    Parâmetro:
+    ---------
+    cpath: string
+        Nome do diretório a partir de onde será renomeados os arquivos
+    """
+
+    change_options = ['files', 'dirs', 'all']
+    wfiles = []
+    rfiles = []
+
+    if change not in change_options:
+        raise ValueError('\'' + change + '\'' +
+                         ' is not a valid option. Options are '\
+                                  '\'files\', \'dirs\' and \'all\'.')
+
+    if not os.path.isdir(cpath):
+        raise ValueError('Invalid path.')
+
+    os.chdir(cpath)
+
+    def oslistdir(p, ignored=[]):
+        rr = []
+        ignored = [f[:-1] if f[-1] == '/' else f for f in ignored]
+        rr = [
+            f for f in os.listdir(p)
+            if (not f.startswith('.') and f not in ignored)
+        ]
+        return rr
+
+    if not recursive:
+        if change == 'files':
+            wfiles = [
+                f for f in oslistdir('.', ignored=ignore) if os.path.isfile(f)
+            ]
+        elif change == 'dirs':
+            wfiles = [
+                f for f in oslistdir('.', ignored=ignore) if os.path.isdir(f)
+            ]
+        else:
+            wfiles = [f for f in oslistdir('.', ignored=ignore)]
+        rfiles = [
+            fix_name(
+                f,
+                change_dots=change_dots,
+                change_brackets=change_brackets,
+                rmUTF=rmUTF) for f in wfiles
+        ]
+
+    else:
+        for root, dirs, files in os.walk('.', topdown=False):
+            files = [f for f in files if not f.startswith('.')]
+            dirs = [d for d in dirs if not d.startswith('.')]
+            if change == 'files':
+                wd = files
+            elif change == 'dirs':
+                wd = dirs
+            else:
+                wd = files + dirs
+            for f in wd:
+                new_f = fix_name(
+                    f,
+                    change_dots=change_dots,
+                    change_brackets=change_brackets,
+                    rmUTF=rmUTF)
+                wfiles.append(os.path.join(root, f))
+                rfiles.append(os.path.join(root, new_f))
+
+    # print(wfiles)
+    # print(rfiles)
+    for f, new_f in zip(wfiles, rfiles):
+        if f != new_f:
+            vprint(f + ' -> ' + new_f)
+            os.rename(f, new_f)
+
+    return 0
+
+
+def fix_name(sname, change_dots=False, change_brackets=False, rmUTF=False):
+    """Troca espaços por underscores e remove os que estão em excesso.
+
+    Parâmetro:
+    ----------
+    sname: string
+        Nome com espaços
+    retorna:
+        String 'sname' mas com os espaços substituídos por underscores
+    """
+
+    new_name = sname
+
+    if rmUTF:
+        new_name = rmUTFchars(new_name)
+
+    if change_dots:
+
+        n_wo_ext = os.path.splitext(new_name)[0]
+        n_ext = os.path.splitext(new_name)[-1]
+        new_name = n_wo_ext.replace('.', '_') + n_ext
+
+    if change_brackets:
+        new_name = re.sub(r'\(|\)|\[|\]|\{|\}', r'', new_name)
+
+    new_name = re.sub(r'\s+', r'_', new_name)
+    new_name = re.sub(r'_+', r'_', new_name)
+    new_name = re.sub(r'(^_|_$)', r'', new_name)
+    new_name = re.sub(r'_\.', r'.', new_name)
+
+    return new_name
+
+
+def rmUTFchars(sname):
+    """Substitui caracteres UTF-8 de uma string
+
+    Parameters
+    ----------
+    sname : string
+    """
+
+    utf_chars = {
+        u'ç': 'c',
+        u'Ç': 'C',
+        u'~': '',
+        u'^': '',
+        u'ã': 'a',
+        u'â': 'a',
+        u'á': 'a',
+        u'à': 'a',
+        u'Ã': 'A',
+        u'Â': 'A',
+        u'Á': 'A',
+        u'À': 'A',
+        u'é': 'e',
+        u'ê': 'e',
+        u'è': 'e',
+        u'É': 'E',
+        u'Ê': 'E',
+        u'È': 'E',
+        u'í': 'i',
+        u'î': 'i',
+        u'ì': 'i',
+        u'Í': 'I',
+        u'Î': 'I',
+        u'Ì': 'I',
+        u'ó': 'o',
+        u'ô': 'o',
+        u'ò': 'o',
+        u'õ': 'o',
+        u'Ó': 'O',
+        u'Ô': 'O',
+        u'Ò': 'O',
+        u'Õ': 'O',
+        u'ú': 'u',
+        u'û': 'u',
+        u'ù': 'u',
+        u'Ú': 'U',
+        u'Û': 'U',
+        u'Ù': 'U',
+    }
+
+    for _s in sname:
+
+        if _s in utf_chars:
+
+            sname = sname.replace(_s, utf_chars[_s])
+
+    return sname
+
+
+if __name__ == '__main__':
+    main()

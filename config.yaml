@@ -1,0 +1,171 @@
+config:
+  backup: true
+  create: true
+  dotpath: homedir
+dotfiles:
+  d_scripts:
+    dst: ~/.scripts
+    link: true
+    src: .scripts
+  d_i3:
+    dst: ~/.config/i3
+    link: true
+    src: .config/i3
+  d_i3lt:
+    dst: ~/.config/i3
+    link: true
+    src: .config/i3lt
+  d_bspwm:
+    dst: ~/.config/bspwm
+    link: true
+    src: .config/bspwm
+  d_sxhkd:
+    dst: ~/.config/sxhkd
+    link: true
+    src: .config/sxhkd
+  d_bspwmlt:
+    dst: ~/.config/bspwm
+    link: true
+    src: .config/bspwmlt
+  d_sxhkdlt:
+    dst: ~/.config/sxhkd
+    link: true
+    src: .config/sxhkdlt
+  d_mpd:
+    dst: ~/.config/mpd
+    link: true
+    src: .config/mpd
+  d_mpdlt:
+    dst: ~/.config/mpd
+    link: true
+    src: .config/mpdlt
+  d_ncmpcpp:
+    dst: ~/.ncmpcpp
+    link: true
+    src: .ncmpcpp
+  d_ncmpcpplt:
+    dst: ~/.ncmpcpp
+    link: true
+    src: .ncmpcpplt
+  d_ranger:
+    dst: ~/.config/ranger
+    link: true
+    src: .config/ranger
+  d_rofi:
+    dst: ~/.config/rofi
+    link: true
+    src: .config/rofi
+  d_rtv:
+    dst: ~/.config/rtv
+    link: true
+    src: .config/rtv
+  d_termite:
+    dst: ~/.config/termite
+    link: true
+    src: .config/termite
+  d_vim:
+    dst: ~/vim
+    link: true
+    src: vim
+  d_w3m:
+    dst: ~/.w3m
+    link: true
+    src: .w3m
+  d_qutebrowser:
+    dst: ~/.config/qutebrowser
+    link: true
+    src: .config/qutebrowser
+  f_Xdefaults:
+    dst: ~/.Xdefaults
+    link: true
+    src: .Xdefaults
+  f_Xresources:
+    dst: ~/.Xresources
+    link: true
+    src: .Xresources
+  f_spacemacs:
+    dst: ~/.spacemacs
+    link: true
+    src: .spacemacs
+  f_tmux.conf:
+    dst: ~/.tmux.conf
+    link: true
+    src: .tmux.conf
+  f_tmux.conf.local:
+    dst: ~/.tmux.conf.local
+    link: true
+    src: .tmux.conf.local
+  f_tmux.conf.locallt:
+    dst: ~/.tmux.conf.local
+    link: true
+    src: .tmux.conf.locallt
+  f_tmux.conflt:
+    dst: ~/.tmux.conf
+    link: true
+    src: .tmux.conflt
+  f_urlview:
+    dst: ~/.urlview
+    link: true
+    src: .urlview
+  f_vimrc:
+    dst: ~/.vimrc
+    link: true
+    src: .vimrc
+  f_gitconfig:
+    dst: ~/.gitconfig
+    link: true
+    src: .gitconfig
+  f_startupapps:
+    dst: ~/.startup-apps
+    link: true
+    src: .startup-apps
+  f_startupappslt:
+    dst: ~/.startup-apps
+    link: true
+    src: .startup-apps-lt
+  f_zprofile:
+    dst: ~/.zprofile
+    link: true
+    src: .zprofile
+  f_xinitrc:
+    dst: ~/.xinitrc
+    link: true
+    src: .xinitrc
+profiles:
+  base:
+    dotfiles:
+    - d_scripts
+    - d_ranger
+    #- d_rofi
+    - d_rtv
+    - d_vim
+    - d_w3m
+    - d_qutebrowser
+    - f_Xdefaults
+    - f_Xresources
+    - f_spacemacs
+    - f_urlview
+    - f_vimrc
+    - f_gitconfig
+    - f_zprofile
+    - f_xinitrc
+  laptop:
+    dotfiles:
+    #- d_i3lt
+    - d_mpdlt
+    - d_ncmpcpplt
+    - f_tmux.conflt
+    - f_tmux.conf.locallt
+    - f_startupappslt
+    include:
+    - base
+  mrcspc:
+    dotfiles:
+    #- d_i3
+    - d_mpd
+    - d_ncmpcpp
+    - f_tmux.conf
+    - f_tmux.conf.local
+    - f_startupapps
+    include:
+    - base

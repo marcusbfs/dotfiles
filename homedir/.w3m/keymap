@@ -1,0 +1,12 @@
+######################
+# My Custom Keybinding
+######################
+
+# open current url (default: Shift+M)
+# e.g 2+Shift+M
+keymap  e EXTERN
+
+# open url under cursor (default: Esc+Shift+M)
+# e.g 2+Esc+Shift+M
+keymap  f EXTERN_LINK
+
