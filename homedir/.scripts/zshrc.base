@@ -75,6 +75,7 @@ alias ytdlhq="youtube-dl -f bestvideo+bestaudio"
 alias svh="sudo $EDITOR /etc/hosts"
 alias wine-maple="wine ~/.wine/drive_c/Program\ Files/Maple\ 17/bin.X86_64_WINDOWS/maplew.exe"
 alias wine-steam="wine ~/.wine/drive_c/Program\ Files\ \(x86\)/Steam/Steam.exe -no-cef-sandbox"
+alias temacs="emacs -nw"
 
 # Iniciar com tmux
 if [[ -z $TMUX ]] && pgrep X >/dev/null 2>&1; then

@@ -12,5 +12,5 @@ cf-sxhkdrc ~/.config/sxhkd/sxhkdrc
 cf-startup-apps ~/.startup-apps
 cf-zprofile ~/.zprofile
 cf-xinitrc ~/.xinitrc
-cf-qutebrowser-confpy ~/.config/qutebrowser/config.py
+cf-qutebrowser-configpy ~/.config/qutebrowser/config.py
 cf-spacemacs ~/.spacemacs

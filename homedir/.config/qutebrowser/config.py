@@ -58,6 +58,7 @@ c.url.searchengines = {'DEFAULT': 'https://www.google.com.br/search?q={}',
         'gh': 'https://github.com/search?q={}&type=Code',
         'r': 'https://reddit.com/r/{}',
         'rw': 'https://www.reddit.com/r/{}/top/?sort=top&t=week',
+        'rs': 'https://www.google.com.br/search?q={}%20site%3Areddit.com',
         'tpb': 'https://thepiratebay.org/search/{}/0/99/0',
         }
 
