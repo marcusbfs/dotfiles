@@ -99,8 +99,8 @@ class MainProgram():
             self.verbose_print(t + 'A file named ' + self.inquotes(NEW_NAME) +
                                ' already exists')
         else:
-            self.verbose_print(t + self.inquotes(file) + ' -> ' +
-                               self.inquotes(NEW_NAME))
+            self.verbose_print(
+                t + self.inquotes(file) + ' -> ' + self.inquotes(NEW_NAME))
             if confirm:
                 ans = input(2 * t + 'Proceed? ([y]/n) ')
                 if ans.lower() == 'n':

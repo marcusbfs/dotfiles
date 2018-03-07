@@ -1,29 +1,32 @@
 #!/usr/bin/env python
 
-from shutil import which
-from subprocess import run
-from os.path import expanduser, isfile
+import os
+import shutil
+import subprocess
+
 
 def main():
 
-    lock_exec = which('betterlockscreen')
+    lock_exec = shutil.which('betterlockscreen')
     if lock_exec:
-        run([lock_exec, "-l", "dim"])
+        subprocess.run([lock_exec, "-l", "dim"])
         return 0
 
     else:
-        lock_exec = which('i3lock')
-        lock_img=expanduser("~/.config/i3/nlock.png")
-        imgpath=expanduser("/tmp/i3screenshot.png")
-        run(["scrot", "--silent", imgpath])
-        run(["convert", imgpath, "-blur", "0x3", imgpath])
+        lock_exec = shutil.which('i3lock')
+        lock_img = os.path.expanduser("~/.config/i3/nlock.png")
+        imgpath = os.path.expanduser("/tmp/i3screenshot.png")
+        subprocess.run(["scrot", "--silent", imgpath])
+        subprocess.run(["convert", imgpath, "-blur", "0x3", imgpath])
 
-        if isfile(lock_img):
-            run(["convert", imgpath, lock_img, "-gravity", "center",
-                "-composite", "-matte", imgpath])
+        if os.path.isfile(lock_img):
+            subprocess.run([
+                "convert", imgpath, lock_img, "-gravity", "center",
+                "-composite", "-matte", imgpath
+            ])
 
-        run([lock_exec, "-i", imgpath])
-        run(["rm", imgpath])
+        subprocess.run([lock_exec, "-i", imgpath])
+        subprocess.run(["rm", imgpath])
 
 
 if __name__ == "__main__":

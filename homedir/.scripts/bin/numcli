@@ -128,7 +128,7 @@ def main():
         n = len(args.diff)
         x = sp.symbols(var)
         eq = sp.sympify(equalsign(us))
-        sol = sp.diff(eq,x)
+        sol = sp.diff(eq, x)
         sp.pprint(sol)
         return
 

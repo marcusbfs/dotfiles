@@ -16,7 +16,8 @@ with open(os.path.join(dir_path, "rc.conf.base")) as r:
 
 with open(os.path.join(dir_path, "folders2sync")) as fold:
     for line in csv.reader(fold, delimiter=' '):
-        zsh += ("alias " + line[0] + "=\"builtin cd " + line[1] + " && ls -a\"\n")
+        zsh += (
+            "alias " + line[0] + "=\"builtin cd " + line[1] + " && ls -a\"\n")
         rgr += ("map g" + line[0] + " cd " + line[1] + "\n")
 
 with open(os.path.join(dir_path, "configs2sync")) as conf:
