@@ -17,13 +17,15 @@ def main():
         cwd = os.path.join(cwd, ctmp)
 
     vid_ext = ['.mp4', '.avi', '.mkv']
-    mpv_cmd = [os.path.expandvars("$PLAYER")]
+    # mpv_cmd = os.path.expandvars("command $PLAYER")
+    mpv_cmd = 'mpv'
 
     for f in os.listdir(cwd):
         f_ext = os.path.splitext(f)[-1]
         if f_ext in vid_ext:
             subprocess.Popen(
-                mpv_cmd + [os.path.join(cwd, f)],
+                mpv_cmd + ' ' + os.path.join(cwd, f),
+                shell=True,
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL)
             return 0
@@ -47,8 +49,6 @@ def dmenu_select_dir(path, args):
     for m in movies:
         tmp += m + '\n'
 
-    # tmp = ''
-    # [tmp += m + '\n' for m in os.listdir(path) if os.path.isdir(os.path.join(path, m))]
     _s = subprocess.run(
         'echo "' + tmp.rstrip() + '" | sort -f | dmenu -i ' + args,
         shell=True,
