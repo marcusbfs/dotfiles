@@ -3,6 +3,7 @@
 [ -f $HOME/.config/wall.jpg ] && feh --bg-scale $HOME/.config/wall.jpg &
 setxkbmap -model abnt2 -layout br -option 'caps:ctrl_modifier' &
 xcape -e 'Caps_Lock=Escape' &
+slstatus &
 #nm-applet &
 clipmenud &
 mpd &
