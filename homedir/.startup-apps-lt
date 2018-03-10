@@ -6,18 +6,18 @@ xcape -e 'Caps_Lock=Escape' &
 #nm-applet &
 clipmenud &
 #mpd &
-transmission-daemon &
+#transmission-daemon &
 udiskie -2 -t &
 synergyc 192.168.1.104 &
 xfce4-power-manager &
 volumeicon &
-redshift-gtk &
+#redshift-gtk &
+redshift -l -21.27:-45.04 -t 6500:4500 &
 dropbox start &
 unclutter --timeout 2 &
 synclient VertScrollDelta=-100 &
 [ -f $HOME/.Xdefaults ] && xrdb -load $HOME/.Xdefaults &
 [ -f $HOME/.Xresources ] && xrdb -merge $HOME/.Xresources &
-[ -f $HOME/workspace/outros/dotfiles/data/suckless-tools/xsetroot.sh ] && bash $HOME/workspace/outros/dotfiles/data/suckless-tools/xsetroot.sh &
 python $HOME/.scripts/syncaf.py &
 xset -b
 xset s off -dpms
