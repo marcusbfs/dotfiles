@@ -63,9 +63,12 @@ c.url.searchengines = {'DEFAULT': 'https://www.google.com.br/search?q={}',
         }
 
 # bindings
-_mpv_command = 'mpv --cache=150000 --volume=60 --ytdl-format="bestvideo[height<=?720][fps<=?30]+bestaudio/best"'
-config.bind(',v', 'hint links spawn tsp ' + _mpv_command + ' {hint-url}')
-config.bind(',V', 'spawn tsp ' + _mpv_command + ' {url}')
+_mpv_720 = 'mpv --cache=150000 --volume=60 --ytdl-format="bestvideo[height<=?720][fps<=?30]+bestaudio/best"'
+_mpv_1080 = 'mpv --cache=150000 --volume=60 --ytdl-format="bestvideo[height<=?1080][fps<=?30]+bestaudio/best"'
+config.bind(',v', 'hint links spawn tsp ' + _mpv_720 + ' {hint-url}')
+config.bind(',V', 'spawn tsp ' + _mpv_720 + ' {url}')
+config.bind(',b', 'hint links spawn tsp ' + _mpv_1080 + ' {hint-url}')
+config.bind(',B', 'spawn tsp ' + _mpv_1080 + ' {url}')
 config.bind(',f', 'spawn firefox {url}')
 config.bind(',F', 'hint links spawn firefox {hint-url}')
 config.bind(',t', 'hint links spawn transmission-remote --add {hint-url}')
