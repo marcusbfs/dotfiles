@@ -42,6 +42,7 @@ static const Rule rules[] = {
 	{ "qutebrowser",  NULL,       NULL,       1 << 1,       0,           -1 },
 	{ "Vlc",          NULL,       NULL,       1 << 2,       0,           -1 },
 	{ "mpv",          NULL,       NULL,       1 << 2,       1,           -1 },
+	{ "Emacs",        NULL,       NULL,       1 << 8,       0,           -1 },
 };
 
 /* layout(s) */
