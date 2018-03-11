@@ -54,7 +54,7 @@ c.editor.command = ['st', '-e', 'vim' ,'{file}']
 c.url.searchengines = {'DEFAULT': 'https://www.google.com.br/search?q={}',
         'a': 'https://wiki.archlinux.org/?search={}',
         'yt': 'https://www.youtube.com/results?search_query={}',
-        'w': 'https://secure.wikimedia.org/wikipedia/en/w/index.php?title=Special%%3ASearch&search={}',
+        'w': 'https://en.wikipedia.org/wiki/Special:Search/{}',
         'gh': 'https://github.com/search?q={}&type=Code',
         'r': 'https://reddit.com/r/{}',
         'rw': 'https://www.reddit.com/r/{}/top/?sort=top&t=week',
