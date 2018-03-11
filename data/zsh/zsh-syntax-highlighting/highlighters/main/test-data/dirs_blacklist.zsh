@@ -1,6 +1,5 @@
-#!/usr/bin/env perl
 # -------------------------------------------------------------------------------------------------
-# Copyright (c) 2015 zsh-syntax-highlighting contributors
+# Copyright (c) 2018 zsh-syntax-highlighting contributors
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -24,22 +23,18 @@
 # IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # -------------------------------------------------------------------------------------------------
-# vim: ft=perl sw=2 ts=2 et
+# -*- mode: zsh; sh-indentation: 2; indent-tabs-mode: nil; sh-basic-offset: 2; -*-
+# vim: ft=zsh sw=2 ts=2 et
 # -------------------------------------------------------------------------------------------------
 
-# This is a stdin-to-stdout filter that takes TAP output (such as 'make test')
-# on stdin and deletes lines pertaining to expected results.
-#
-# More specifically, if any of the test points in a test file either failed but
-# was expected to pass, or passed but was expected to fail, then emit that test
-# file's output; else, elide that test file's output.
+mkdir foo
+touch foo/bar
+BUFFER=": foo/bar $PWD/foo foo/b"
+X_ZSH_HIGHLIGHT_DIRS_BLACKLIST=($PWD/foo)
 
-use v5.10.0;
-use warnings;
-use strict;
-
-undef $/; # slurp mode
-print for
-  grep { /^ok.*# TODO/m or /^not ok(?!.*# TODO)/m }
-    split /^(?=#)/m,
-      <STDIN>;
+expected_region_highlight=(
+  '1 1 builtin' # :
+  '3 9 path' # foo/bar
+  "11 $(( 14 + $#PWD )) path" # $PWD/foo
+  "$(( 16 + $#PWD )) $(( 20 + $#PWD )) default" # foo/b
+)

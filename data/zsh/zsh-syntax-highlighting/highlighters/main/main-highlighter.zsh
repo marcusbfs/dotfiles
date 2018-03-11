@@ -104,7 +104,8 @@ _zsh_highlight_main_add_region_highlight() {
   (( start -= $#PREBUFFER ))
   (( end -= $#PREBUFFER ))
 
-  (( end < 0 )) && return # having end<0 would be a bug
+  (( start >= end )) && { print -r -- >&2 "zsh-syntax-highlighting: BUG: _zsh_highlight_main_add_region_highlight: start($start) >= end($end)"; return }
+  (( end <= 0 )) && return
   (( start < 0 )) && start=0 # having start<0 is normal with e.g. multiline strings
   _zsh_highlight_add_highlight $start $end "$@"
 }
@@ -228,7 +229,6 @@ _zsh_highlight_highlighter_main_paint()
   local -a options_to_set # used in callees
   local buf="$PREBUFFER$BUFFER"
   integer len="${#buf}"
-  integer pure_buf_len=$(( len - ${#PREBUFFER} ))   # == $#BUFFER, used e.g. in *_check_path
 
   # "R" for round
   # "Q" for square
@@ -756,13 +756,26 @@ _zsh_highlight_main_highlighter_highlight_path_separators()
 _zsh_highlight_main_highlighter_check_path()
 {
   _zsh_highlight_main_highlighter_expand_path $arg;
-  local expanded_path="$REPLY"
+  local expanded_path="$REPLY" tmp_path
 
   REPLY=path
 
   [[ -z $expanded_path ]] && return 1
   [[ -L $expanded_path ]] && return 0
   [[ -e $expanded_path ]] && return 0
+
+  # Check if this is a blacklisted path
+  if [[ $expanded_path[1] == / ]]; then
+    tmp_path=$expanded_path
+  else
+    tmp_path=$PWD/$expanded_path
+  fi
+  tmp_path=$tmp_path:a
+
+  while [[ $tmp_path != / ]]; do
+    [[ -n "${(M)X_ZSH_HIGHLIGHT_DIRS_BLACKLIST:#$tmp_path}" ]] && return 1
+    tmp_path=$tmp_path:h
+  done
 
   # Search the path in CDPATH
   local cdpath_dir
@@ -774,7 +787,7 @@ _zsh_highlight_main_highlighter_check_path()
   [[ ! -d ${expanded_path:h} ]] && return 1
 
   # If this word ends the buffer, check if it's the prefix of a valid path.
-  if [[ ${BUFFER[1]} != "-" && $pure_buf_len == $end_pos ]] &&
+  if [[ ${BUFFER[1]} != "-" && $len == $end_pos ]] &&
      [[ $WIDGET != zle-line-finish ]]; then
     local -a tmp
     tmp=( ${expanded_path}*(N) )
@@ -829,14 +842,12 @@ _zsh_highlight_main_highlighter_highlight_argument()
           _zsh_highlight_main_highlighter_highlight_dollar_quote $i
           (( i = REPLY ))
           highlights+=($reply)
-        elif [[ $arg[i+1] == [\^=~#+] ]]; then
-          while [[ $arg[i+1] == [\^=~#+] ]]; do
-            (( i += 1 ))
-          done
-          if [[ $arg[i+1] == [*@#?-$!] ]]; then
-            (( i += 1 ))
-          fi
-        elif [[ $arg[i+1] == [*@#?-$!] ]]; then
+          continue
+        fi
+        while [[ $arg[i+1] == [\^=~#+] ]]; do
+          (( i += 1 ))
+        done
+        if [[ $arg[i+1] == [*@#?$!-] ]]; then
           (( i += 1 ))
         fi;;
       *)
@@ -887,6 +898,8 @@ _zsh_highlight_main_highlighter_highlight_single_quote()
   if [[ $arg[i] == "'" ]]; then
     style=single-quoted-argument
   else
+    # If unclosed, i points past the end
+    (( i-- ))
     style=single-quoted-argument-unclosed
   fi
   reply=($(( start_pos + arg1 - 1 )) $(( start_pos + i )) $style $reply)
@@ -901,7 +914,7 @@ _zsh_highlight_main_highlighter_highlight_double_quote()
   local i j k style
   reply=()
 
-  for (( i = $1 + 1 ; i < end_pos - start_pos ; i += 1 )) ; do
+  for (( i = $1 + 1 ; i <= end_pos - start_pos ; i += 1 )) ; do
     (( j = i + start_pos - 1 ))
     (( k = j + 1 ))
     case "$arg[$i]" in
@@ -958,6 +971,8 @@ _zsh_highlight_main_highlighter_highlight_double_quote()
   if [[ $arg[i] == '"' ]]; then
     style=double-quoted-argument
   else
+    # If unclosed, i points past the end
+    (( i-- ))
     style=double-quoted-argument-unclosed
   fi
   reply=($(( start_pos + $1 - 1)) $(( start_pos + i )) $style $reply)
@@ -974,7 +989,7 @@ _zsh_highlight_main_highlighter_highlight_dollar_quote()
   integer c
   reply=()
 
-  for (( i = $1 + 2 ; i < end_pos - start_pos ; i += 1 )) ; do
+  for (( i = $1 + 2 ; i <= end_pos - start_pos ; i += 1 )) ; do
     (( j = i + start_pos - 1 ))
     (( k = j + 1 ))
     case "$arg[$i]" in
@@ -1010,6 +1025,8 @@ _zsh_highlight_main_highlighter_highlight_dollar_quote()
   if [[ $arg[i] == "'" ]]; then
     style=dollar-quoted-argument
   else
+    # If unclosed, i points past the end
+    (( i-- ))
     style=dollar-quoted-argument-unclosed
   fi
   reply=($(( start_pos + $1 - 1 )) $(( start_pos + i )) $style $reply)
@@ -1026,6 +1043,8 @@ _zsh_highlight_main_highlighter_highlight_backtick()
   if [[ $arg[i] == '`' ]]; then
     style=back-quoted-argument
   else
+    # If unclosed, i points past the end
+    (( i-- ))
     style=back-quoted-argument-unclosed
   fi
   reply=($(( start_pos + arg1 - 1 )) $(( start_pos + i )) $style)
@@ -1054,7 +1073,7 @@ _zsh_highlight_main__precmd_hook() {
   _zsh_highlight_main__command_type_cache=()
 }
 
-autoload -U add-zsh-hook
+autoload -Uz add-zsh-hook
 if add-zsh-hook precmd _zsh_highlight_main__precmd_hook 2>/dev/null; then
   # Initialize command type cache
   typeset -gA _zsh_highlight_main__command_type_cache
@@ -1063,3 +1082,4 @@ else
   # Make sure the cache is unset
   unset _zsh_highlight_main__command_type_cache
 fi
+typeset -ga X_ZSH_HIGHLIGHT_DIRS_BLACKLIST

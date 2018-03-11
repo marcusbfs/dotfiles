@@ -1,6 +1,5 @@
-#!/usr/bin/env zsh
 # -------------------------------------------------------------------------------------------------
-# Copyright (c) 2015, 2017 zsh-syntax-highlighting contributors
+# Copyright (c) 2015 zsh-syntax-highlighting contributors
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -28,44 +27,12 @@
 # vim: ft=zsh sw=2 ts=2 et
 # -------------------------------------------------------------------------------------------------
 
-# This is a stdin-to-stdout filter that takes TAP output (such as 'make test')
-# on stdin and passes it, colorized, to stdout.
+# Assumes that '/bin/sh' exists and '/bin/s' does not exist.
+# Related to path_prefix.zsh
 
-emulate -LR zsh
+PREBUFFER='ls \'
+BUFFER='/bin/s'
 
-if [[ ! -t 1 ]] ; then
-  exec cat
-fi
-
-while read -r line;
-do
-  case $line in
-    # comment (filename header) or plan
-    (#* | <->..<->)
-      print -nP %F{blue}
-      ;;
-    # SKIP
-    (*# SKIP*)
-      print -nP %F{yellow}
-      ;;
-    # XPASS
-    (ok*# TODO*)
-      print -nP %F{red}
-      ;;
-    # XFAIL
-    (not ok*# TODO*)
-      print -nP %F{yellow}
-      ;;
-    # FAIL
-    (not ok*)
-      print -nP %F{red}
-      ;;
-    # PASS
-    (ok*)
-      print -nP %F{green}
-      ;;
-  esac
-  print -nr - "$line"
-  print -nP %f
-  echo "" # newline
-done
+expected_region_highlight=(
+  '1 6 path_prefix' # /bin/s
+)
