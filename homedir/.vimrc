@@ -106,8 +106,8 @@ endfunction
 autocmd BufWritePre * :call StripWhitespace()
 
 " text with = 79, coluna para delimitar
-set textwidth=79
-set colorcolumn=+1
+"set textwidth=79
+"set colorcolumn=+1
 
 set encoding=utf8
 set fileencoding=utf8

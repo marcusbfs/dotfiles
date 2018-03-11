@@ -138,7 +138,7 @@ profiles:
     - d_ranger
     #- d_rofi
     - d_rtv
-    - d_vim
+    #- d_vim
     - d_w3m
     - d_qutebrowser
     - f_Xdefaults
