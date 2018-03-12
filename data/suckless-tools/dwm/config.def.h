@@ -1,7 +1,8 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
+static const unsigned int gappx = 0; /* gap pixel between windows */
+static const unsigned int borderpx  = 3;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
@@ -15,7 +16,7 @@ static const int viewontag          = 1;     /* Switch view on tag switch */
 //static const char *fonts[]          = { "Misc Termsyn:style=Regular:size=13" };
 //static const char dmenufont[]       = "Misc Termsyn:style=Regular:size=13";
 //#define SAME_FONT "Misc Termsyn:style=Regular:size=13"
-#define SAME_FONT "ProggyCleanTT CE:style=Regular:size=12"
+#define SAME_FONT "ProggyCleanTTSZ:style=Regular:size=12"
 static const char *fonts[]          = { SAME_FONT };
 static const char dmenufont[]       = SAME_FONT;
 static const char col_gray1[]       = "#222222";
@@ -24,10 +25,11 @@ static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 //static const char col_cyan[]        = "#005577";
 static const char col_cyan[]        = "#3c3c3c";
+static const char azul_bb[]         = "#00afff";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+	[SchemeSel]  = { col_gray4, col_cyan,  azul_bb},
 };
 
 /* tagging */
