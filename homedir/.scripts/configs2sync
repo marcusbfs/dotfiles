@@ -6,6 +6,7 @@ cf-folders2sync ~/.scripts/folders2sync
 cf-config2sync ~/.scripts/configs2sync
 cf-tmux ~/.tmux.conf
 cf-Xdefaults ~/.Xdefaults
+cf-Xresources ~/.Xresources
 cf-startup-apps ~/.startup-apps
 cf-zprofile ~/.zprofile
 cf-xinitrc ~/.xinitrc
