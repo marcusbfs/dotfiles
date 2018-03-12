@@ -11,3 +11,5 @@ cf-zprofile ~/.zprofile
 cf-xinitrc ~/.xinitrc
 cf-qutebrowser-configpy ~/.config/qutebrowser/config.py
 cf-spacemacs ~/.spacemacs
+cf-mpd-conf ~/.config/mpd/mpd.conf
+cf-ncmpcpp-config ~/.ncmpcpp/config
