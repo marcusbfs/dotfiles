@@ -171,6 +171,7 @@ struct Systray {
 };
 
 /* function declarations */
+static void togglegaps();
 static void applyrules(Client *c);
 static int applysizehints(Client *c, int *x, int *y, int *w, int *h, int interact);
 static void arrange(Monitor *m);
@@ -281,6 +282,7 @@ static int xerrorstart(Display *dpy, XErrorEvent *ee);
 static void zoom(const Arg *arg);
 
 /* variables */
+static unsigned int gappx;
 static Systray *systray = NULL;
 static const char broken[] = "broken";
 static char stext[256];
@@ -2660,9 +2662,27 @@ zoom(const Arg *arg)
 	pop(c);
 }
 
+void togglegaps() {
+    if (gappx == 0){
+        gappx = gap_px;
+    }else {
+        gappx = 0;
+    }
+}
+
+void on_start(void) {
+    if(start_with_gap == 1) {
+        gappx = gap_px;
+    }
+    else{
+        gappx = 0;
+    }
+}
+
 int
 main(int argc, char *argv[])
 {
+    on_start();
 	if (argc == 2 && !strcmp("-v", argv[1]))
 		die("dwm-"VERSION);
 	else if (argc != 1)

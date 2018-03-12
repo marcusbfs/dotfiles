@@ -1,7 +1,8 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int gappx = 0; /* gap pixel between windows */
+static const unsigned int start_with_gap = 0;
+static const unsigned int gap_px = 20; /* gap pixel between windows */
 static const unsigned int borderpx  = 3;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
@@ -89,6 +90,7 @@ static Key keys[] = {
     // cmds
     {  MODKEY,  XK_p,       spawn,  {.v  =  dmenucmd  }  },
     {  MODKEY,  XK_Return,  spawn,  {.v  =  termcmd   }  },
+    { MODKEY|ControlMask,   XK_g,   togglegaps, {0}},
     {  MODKEY|ShiftMask,  XK_a,      spawn,  scripts_bin_func("toggle-audio-output.py") },
     {  MODKEY|ShiftMask,  XK_x,      spawn,  scripts_bin_func("screen-lock.py")          },
     {  MODKEY,            XK_Print,  spawn,  ESHCMD("gnome-screenshot --interactive")       },
