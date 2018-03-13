@@ -85,7 +85,8 @@ static unsigned int tabspaces = 8;
 
 // Colorscheme
 //#include "tempus_future.c"
-#include "gjm.c"
+#include "/home/mrcsbrn/.cache/wal/colors-wal-st.h"
+unsigned int defaultrcs = 0;
 
 /*
  * Default shape of cursor
@@ -146,8 +147,6 @@ Shortcut shortcuts[] = {
 	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
 	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
 	{ TERMMOD,              XK_I,           iso14755,       {.i =  0} },
-	{ ShiftMask,            XK_Page_Up,     kscrollup,      {.i = -1} },
-	{ ShiftMask,            XK_Page_Down,   kscrolldown,    {.i = -1} },
 };
 
 /*
