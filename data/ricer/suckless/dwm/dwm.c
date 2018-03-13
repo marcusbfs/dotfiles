@@ -2669,6 +2669,7 @@ void togglegaps() {
     }else {
         gappx = 0;
     }
+    arrange(selmon);
 }
 
 void on_start(void) {
