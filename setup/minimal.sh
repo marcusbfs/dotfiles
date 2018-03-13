@@ -51,8 +51,8 @@ inst urlview mpv qt4 task-spooler
 # Audio
 inst pulseaudio pulseaudio-alsa alsa-lib alsa-plugins alsa-utils projectm-pulseaudio
 
-# Construindo suckless-tools
-pp=$HOME/workspace/outros/dotfiles/data/suckless-tools
+# Construindo suckless
+pp=$HOME/workspace/outros/dotfiles/data/suckless
 cp -r $pp/dwm /tmp
 cp -r $pp/dmenu /tmp
 cp -r $pp/st /tmp

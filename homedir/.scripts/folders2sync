@@ -13,5 +13,5 @@ HD /run/media/mrcsbrn/mrcshd
 V /run/media/mrcsbrn/mrcshd/Videos
 D ~/workspace/outros/dotfiles
 cfg ~/.config
-sless ~/workspace/outros/dotfiles/data/suckless-tools
+sless ~/workspace/outros/dotfiles/data/suckless
 s ~/.scripts/
