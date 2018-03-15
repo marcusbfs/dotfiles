@@ -27,10 +27,11 @@ config.h:
 dwm: ${OBJ}
 	@echo CC -o $@
 	@${CC} -o $@ ${OBJ} ${LDFLAGS}
+	@rm -f config.h
 
 clean:
 	@echo cleaning
-	@rm -f config.h dwm ${OBJ} dwm-${VERSION}.tar.gz
+	@rm -f dwm ${OBJ} dwm-${VERSION}.tar.gz config.h
 
 dist: clean
 	@echo creating dist tarball

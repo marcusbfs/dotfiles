@@ -15,13 +15,6 @@ static const int viewontag          = 1;     /* Switch view on tag switch */
 #define SAME_FONT "ProggyCleanTTSZ:style=Regular:size=12"
 static const char *fonts[]          = { SAME_FONT };
 static const char dmenufont[]       = SAME_FONT;
-static const char col_gray1[]       = "#222222";
-static const char col_gray2[]       = "#444444";
-static const char col_gray3[]       = "#bbbbbb";
-static const char col_gray4[]       = "#eeeeee";
-//static const char col_cyan[]        = "#005577";
-static const char col_cyan[]        = "#3c3c3c";
-static const char azul_bb[]         = "#00afff";
 
 #include "/home/mrcsbrn/.cache/wal/colors-wal-dwm.h"
 
@@ -34,12 +27,12 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
+	{ "Emacs",        NULL,       NULL,       1 << 8,       0,           -1 },
 	{ "Firefox",      NULL,       NULL,       1 << 1,       0,           -1 },
-	{ "qutebrowser",  NULL,       NULL,       1 << 1,       0,           -1 },
 	{ "Vlc",          NULL,       NULL,       1 << 2,       0,           -1 },
 	{ "mpv",          NULL,       NULL,       1 << 2,       1,           -1 },
-	{ "Emacs",        NULL,       NULL,       1 << 8,       0,           -1 },
-	{ "st-float",      NULL,       NULL,       0,       1,           -1 },
+	{ "qutebrowser",  NULL,       NULL,       1 << 1,       0,           -1 },
+	{ "st-float",     NULL,       NULL,            0,       1,           -1 },
 };
 
 /* layout(s) */
@@ -84,13 +77,13 @@ static Key keys[] = {
     // cmds
     {  MODKEY,              XK_p,      spawn,  {.v  =  dmenucmd  }  },
     {  MODKEY,              XK_Return, spawn,  {.v  =  termcmd   }  },
-    {  MODKEY,              XK_r,      spawn,  ESHCMD("st -e ranger")  },
+    {  MODKEY,              XK_r,      spawn,  ESHCMD("st -e ranger") },
     {  MODKEY|ControlMask,  XK_g,      togglegaps, {0}},
     {  MODKEY|ShiftMask,    XK_a,      spawn,  scripts_bin_func("toggle-audio-output.py") },
     {  MODKEY|ShiftMask,    XK_x,      spawn,  scripts_bin_func("screen-lock.py")          },
     {  MODKEY,              XK_Print,  spawn,  ESHCMD("gnome-screenshot --interactive")       },
     {  MODKEY,              XK_Insert, spawn,  ESHCMD("clipmenu")       },
-    {  MODKEY,              XK_s,      spawn,  SHCMD("read -r X Y W H < <(slop -f '%x %y %w %h' -b 1 -t 0 -q); (( W /= 8  )); (( H /= 16  )); g=${W}x${H}+${X}+${Y}; st -c st-float -g $g")},
+    {  MODKEY,              XK_s,      spawn,  SHCMD("read -r X Y W H < <(slop -f '%x %y %w %h' -b 1 -t 0 -q); (( W     /= 8   )); (( H /= 16   )); g=${W}x${H}+${X}+${Y}; st -c st-float -g $g") },
     {  0,                   XF86XK_AudioPlay,  spawn,  ESHCMD("mpc toggle")  },
     {  0,                   XF86XK_AudioStop,  spawn,  ESHCMD("mpc stop")  },
     {  0,                   XF86XK_AudioNext,  spawn,  ESHCMD("mpc next")  },
@@ -105,19 +98,19 @@ static Key keys[] = {
     {  MODKEY,              XK_Tab,    view,        {0}  },
     {  MODKEY,              XK_q,      killclient,  {0}  },
     {  MODKEY|ShiftMask,    XK_q,      killclient,  {0}  },
-    {  MODKEY,              XK_Down,   moveresize,  {.v = "0x 25y 0w 0h"} },
-    {  MODKEY,              XK_Up,     moveresize,  {.v = "0x -25y 0w 0h"} },
-    {  MODKEY,              XK_Right,  moveresize,  {.v = "25x 0y 0w 0h"} },
-    {  MODKEY,              XK_Left,   moveresize,  {.v = "-25x 0y 0w 0h"} },
-    {  MODKEY|ShiftMask,    XK_Down,   moveresize,  {.v = "0x 0y 0w 25h"} },
-    {  MODKEY|ShiftMask,    XK_Up,     moveresize,  {.v = "0x 0y 0w -25h"} },
-    {  MODKEY|ShiftMask,    XK_Right,  moveresize,  {.v = "0x 0y 25w 0h"} },
-    {  MODKEY|ShiftMask,    XK_Left,   moveresize,  {.v = "0x 0y -25w 0h"} },
     // resize
     {  MODKEY,              XK_i,      incnmaster,     {.i = +1 } },
     {  MODKEY,              XK_d,      incnmaster,     {.i = -1 } },
     {  MODKEY,              XK_h,      setmfact,       {.f = -0.05} },
     {  MODKEY,              XK_l,      setmfact,       {.f = +0.05} },
+    {  MODKEY,              XK_Down,   moveresize,     {.v = "0x 25y 0w 0h"} },
+    {  MODKEY,              XK_Up,     moveresize,     {.v = "0x -25y 0w 0h"} },
+    {  MODKEY,              XK_Right,  moveresize,     {.v = "25x 0y 0w 0h"} },
+    {  MODKEY,              XK_Left,   moveresize,     {.v = "-25x 0y 0w 0h"} },
+    {  MODKEY|ShiftMask,    XK_Down,   moveresize,     {.v = "0x 0y 0w 25h"} },
+    {  MODKEY|ShiftMask,    XK_Up,     moveresize,     {.v = "0x 0y 0w -25h"} },
+    {  MODKEY|ShiftMask,    XK_Right,  moveresize,     {.v = "0x 0y 25w 0h"} },
+    {  MODKEY|ShiftMask,    XK_Left,   moveresize,     {.v = "0x 0y -25w 0h"} },
     // layout
     {  MODKEY,              XK_t,      setlayout,      {.v = &layouts[0]} },
     {  MODKEY,              XK_f,      setlayout,      {.v = &layouts[1]} },
