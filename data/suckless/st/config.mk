@@ -1,5 +1,5 @@
 # st version
-VERSION = 0.7
+VERSION = 0.8
 
 # Customize below to fit your system
 
@@ -7,8 +7,8 @@ VERSION = 0.7
 PREFIX = /usr/local
 MANPREFIX = $(PREFIX)/share/man
 
-X11INC = /usr/include/X11
-X11LIB = /usr/lib/X11
+X11INC = /usr/X11R6/include
+X11LIB = /usr/X11R6/lib
 
 # includes and libs
 INCS = -I$(X11INC) \
