@@ -50,6 +50,24 @@ dmenu matches menu items case insensitively.
 .BI \-l " lines"
 dmenu lists items vertically, with the given number of lines.
 .TP
+.BI \-x " xoffset"
+dmenu is placed at this offset measured from the left side of the monitor.
+Can be negative.
+If option
+.B \-m
+is present, the measurement will use the given monitor.
+.TP
+.BI \-y " yoffset"
+dmenu is placed at this offset measured from the top of the monitor.  If the
+.B \-b
+option is used, the offset is measured from the bottom.  Can be negative.
+If option
+.B \-m
+is present, the measurement will use the given monitor.
+.TP
+.BI \-w " width"
+sets the width of the dmenu window.
+.TP
 .BI \-m " monitor"
 dmenu is displayed on the monitor number supplied. Monitor numbers are starting
 from 0.
@@ -99,6 +117,12 @@ Confirm input.  Prints the input text to stdout and exits, returning success.
 .TP
 .B Escape
 Exit without selecting an item, returning failure.
+.TP
+.B Ctrl-Left
+Move cursor to the start of the current word
+.TP
+.B Ctrl-Right
+Move cursor to the end of the current word
 .TP
 C\-a
 Home
@@ -159,6 +183,12 @@ Paste from primary X selection
 .TP
 C\-Y
 Paste from X clipboard
+.TP
+M\-b
+Move cursor to the start of the current word
+.TP
+M\-f
+Move cursor to the end of the current word
 .TP
 M\-g
 Home

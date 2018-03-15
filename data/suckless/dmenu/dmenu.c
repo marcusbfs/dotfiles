@@ -36,6 +36,9 @@ struct item {
 static char text[BUFSIZ] = "";
 static char *embed;
 static int bh, mw, mh;
+static int dmx = 0; /* put dmenu at this x offset */
+static int dmy = 0; /* put dmenu at this y offset (measured from the bottom if topbar is 0) */
+static unsigned int dmw = 0; /* make dmenu this wide */
 static int inputw = 0, promptw;
 static int lrpad; /* sum of left and right padding */
 static size_t cursor;
@@ -51,10 +54,6 @@ static XIC xic;
 
 static Drw *drw;
 static Clr *scheme[SchemeLast];
-
-static char *histfile;
-static char *histbuf, *histptr;
-static size_t histsz;
 
 #include "config.h"
 
@@ -292,102 +291,19 @@ nextrune(int inc)
 }
 
 static void
-loadhistory(void)
+movewordedge(int dir)
 {
-	FILE *fp = NULL;
-	size_t sz;
-
-	if (!histfile)
-		return;
-	if (!(fp = fopen(histfile, "r")))
-		return;
-	fseek(fp, 0, SEEK_END);
-	sz = ftell(fp);
-	fseek(fp, 0, SEEK_SET);
-	if (sz) {
-		histsz = sz + 1 + BUFSIZ;
-		if (!(histbuf = malloc(histsz))) {
-			fprintf(stderr, "warning: cannot malloc %lu "\
-				"bytes", histsz);
-		} else {
-			histptr = histbuf + fread(histbuf, 1, sz, fp);
-			if (histptr <= histbuf) { /* fread error */
-				free(histbuf);
-				histbuf = NULL;
-				return;
-			}
-			if (histptr[-1] != '\n')
-				*histptr++ = '\n';
-			histptr[BUFSIZ - 1] = '\0';
-			*histptr = '\0';
-			histsz = histptr - histbuf + BUFSIZ;
-		}
+	if (dir < 0) { /* move cursor to the start of the word*/
+		while (cursor > 0 && strchr(worddelimiters, text[nextrune(-1)]))
+			cursor = nextrune(-1);
+		while (cursor > 0 && !strchr(worddelimiters, text[nextrune(-1)]))
+			cursor = nextrune(-1);
+	} else { /* move cursor to the end of the word */
+		while (text[cursor] && strchr(worddelimiters, text[cursor]))
+			cursor = nextrune(+1);
+		while (text[cursor] && !strchr(worddelimiters, text[cursor]))
+			cursor = nextrune(+1);
 	}
-	fclose(fp);
-}
-
-static void
-navhistory(int dir)
-{
-	char *p;
-	size_t len = 0, textlen;
-
-	if (!histbuf)
-		return;
-	if (dir > 0) {
-		if (histptr == histbuf + histsz - BUFSIZ)
-			return;
-		while (*histptr && *histptr++ != '\n');
-		for (p = histptr; *p && *p++ != '\n'; len++);
-	} else {
-		if (histptr == histbuf)
-			return;
-		if (histptr == histbuf + histsz - BUFSIZ) {
-			textlen = strlen(text);
-			textlen = MIN(textlen, BUFSIZ - 1);
-			strncpy(histptr, text, textlen);
-			histptr[textlen] = '\0';
-		}
-		for (histptr--; histptr != histbuf && histptr[-1] != '\n';
-		     histptr--, len++);
-	}
-	len = MIN(len, BUFSIZ - 1);
-	strncpy(text, histptr, len);
-	text[len] = '\0';
-	cursor = len;
-	match();
-}
-static void
-savehistory(char *str)
-{
-	unsigned int n, len = 0;
-	size_t slen;
-	char *p;
-	FILE *fp;
-
-	if (!histfile || !maxhist)
-		return;
-	if (!(slen = strlen(str)))
-		return;
-	if (histbuf && maxhist > 1) {
-		p = histbuf + histsz - BUFSIZ - 1; /* skip the last newline */
-		if (histnodup) {
-			for (; p != histbuf && p[-1] != '\n'; p--, len++);
-			n++;
-			if (slen == len && !strncmp(p, str, len)) {
-				return;
-			}
-		}
-		for (; p != histbuf; p--, len++)
-			if (p[-1] == '\n' && ++n + 1 > maxhist)
-				break;
-		fp = fopen(histfile, "w");
-		fwrite(p, 1, len + 1, fp);	/* plus the last newline */
-	} else {
-		fp = fopen(histfile, "w");
-	}
-	fwrite(str, 1, strlen(str), fp);
-	fclose(fp);
 }
 
 static void
@@ -437,6 +353,14 @@ keypress(XKeyEvent *ev)
 			XConvertSelection(dpy, (ev->state & ShiftMask) ? clip : XA_PRIMARY,
 			                  utf8, utf8, win, CurrentTime);
 			return;
+		case XK_Left:
+			movewordedge(-1);
+			ksym = NoSymbol;
+			break;
+		case XK_Right:
+			movewordedge(+1);
+			ksym = NoSymbol;
+			break;
 		case XK_Return:
 		case XK_KP_Enter:
 			break;
@@ -448,14 +372,20 @@ keypress(XKeyEvent *ev)
 		}
 	else if (ev->state & Mod1Mask)
 		switch(ksym) {
+		case XK_b:
+			movewordedge(-1);
+			ksym = NoSymbol;
+			break;
+		case XK_f:
+			movewordedge(+1);
+			ksym = NoSymbol;
+			break;
 		case XK_g: ksym = XK_Home;  break;
 		case XK_G: ksym = XK_End;   break;
 		case XK_h: ksym = XK_Up;    break;
 		case XK_j: ksym = XK_Next;  break;
 		case XK_k: ksym = XK_Prior; break;
 		case XK_l: ksym = XK_Down;  break;
-		case XK_p: navhistory(-1); buf[0]=0; break;
-		case XK_n: navhistory(1); buf[0]=0; break;
 		default:
 			return;
 		}
@@ -463,6 +393,8 @@ keypress(XKeyEvent *ev)
 	default:
 		if (!iscntrl(*buf))
 			insert(buf, len);
+		break;
+	case NoSymbol:
 		break;
 	case XK_Delete:
 		if (text[cursor] == '\0')
@@ -531,8 +463,6 @@ keypress(XKeyEvent *ev)
 	case XK_KP_Enter:
 		puts((sel && !(ev->state & ShiftMask)) ? sel->text : text);
 		if (!(ev->state & ControlMask)) {
-			savehistory((sel && !(ev->state & ShiftMask))
-				    ? sel->text : text);
 			cleanup();
 			exit(0);
 		}
@@ -813,9 +743,9 @@ setup(void)
 				if (INTERSECT(x, y, 1, 1, info[i]))
 					break;
 
-		x = info[i].x_org;
-		y = info[i].y_org + (topbar ? 0 : info[i].height - mh);
-		mw = info[i].width;
+		x = info[i].x_org + dmx;
+		y = info[i].y_org + (topbar ? dmy : info[i].height - mh - dmy);
+		mw = (dmw>0 ? dmw : info[i].width);
 		XFree(info);
 	} else
 #endif
@@ -823,9 +753,9 @@ setup(void)
 		if (!XGetWindowAttributes(dpy, parentwin, &wa))
 			die("could not get embedding window attributes: 0x%lx",
 			    parentwin);
-		x = 0;
-		y = topbar ? 0 : wa.height - mh;
-		mw = wa.width;
+		x = dmx;
+		y = topbar ? dmy : wa.height - mh - dmy;
+		mw = (dmw>0 ? dmw : wa.width);
 	}
 	promptw = (prompt && *prompt) ? TEXTW(prompt) - lrpad / 4 : 0;
 	inputw = MIN(inputw, mw/3);
@@ -889,10 +819,14 @@ main(int argc, char *argv[])
 		} else if (i + 1 == argc)
 			usage();
 		/* these options take one argument */
-		else if (!strcmp(argv[i], "-H"))
-			histfile = argv[++i];
 		else if (!strcmp(argv[i], "-l"))   /* number of lines in vertical list */
 			lines = atoi(argv[++i]);
+		else if (!strcmp(argv[i], "-x"))   /* window x offset */
+			dmx = atoi(argv[++i]);
+		else if (!strcmp(argv[i], "-y"))   /* window y offset (from bottom up if -b) */
+			dmy = atoi(argv[++i]);
+		else if (!strcmp(argv[i], "-w"))   /* make dmenu this wide */
+			dmw = atoi(argv[++i]);
 		else if (!strcmp(argv[i], "-m"))
 			mon = atoi(argv[++i]);
 		else if (!strcmp(argv[i], "-p"))   /* adds prompt to left of input field */
@@ -927,7 +861,6 @@ main(int argc, char *argv[])
 	if (!drw_fontset_create(drw, fonts, LENGTH(fonts)))
 		die("no fonts could be loaded.");
 	lrpad = drw->fonts->h;
-	loadhistory();
 
 	if (fast) {
 		grabkeyboard();
