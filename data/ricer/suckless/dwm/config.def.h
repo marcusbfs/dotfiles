@@ -77,6 +77,7 @@ static const char *dmenucmd[] = { "dmenu_run", "-i", "-m", dmenumon, "-fn", dmen
 static const char *termcmd[]  = { "st", NULL };
 
 #include "movestack.c"
+#include "moveresize.c"
 #include <X11/XF86keysym.h>
 static Key keys[] = {
     /* modifier                     key        function        argument */
@@ -95,32 +96,40 @@ static Key keys[] = {
     {  0,                   XF86XK_AudioPrev,  spawn,  ESHCMD("mpc prev")  },
     {  MODKEY,              XK_b,              togglebar,  {0}  },
     // move
-    {  MODKEY,              XK_j,       focusstack,  {.i  =   +1  }  },
-    {  MODKEY,              XK_k,       focusstack,  {.i  =   -1  }  },
-    {  MODKEY|ShiftMask,    XK_j,       movestack,   {.i  =   +1  }  },
-    {  MODKEY|ShiftMask,    XK_k,       movestack,   {.i  =   -1  }  },
-    {  MODKEY|ShiftMask,    XK_Return,  zoom,        {0}  },
-    {  MODKEY,              XK_Tab,     view,        {0}  },
-    {  MODKEY,              XK_q,       killclient,  {0}  },
-    {  MODKEY|ShiftMask,    XK_q,       killclient,  {0}  },
+    {  MODKEY,              XK_j,      focusstack,  {.i  =   +1  }  },
+    {  MODKEY,              XK_k,      focusstack,  {.i  =   -1  }  },
+    {  MODKEY|ShiftMask,    XK_j,      movestack,   {.i  =   +1  }  },
+    {  MODKEY|ShiftMask,    XK_k,      movestack,   {.i  =   -1  }  },
+    {  MODKEY|ShiftMask,    XK_Return, zoom,        {0}  },
+    {  MODKEY,              XK_Tab,    view,        {0}  },
+    {  MODKEY,              XK_q,      killclient,  {0}  },
+    {  MODKEY|ShiftMask,    XK_q,      killclient,  {0}  },
+    {  MODKEY,              XK_Down,   moveresize,  {.v = "0x 25y 0w 0h"} },
+    {  MODKEY,              XK_Up,     moveresize,  {.v = "0x -25y 0w 0h"} },
+    {  MODKEY,              XK_Right,  moveresize,  {.v = "25x 0y 0w 0h"} },
+    {  MODKEY,              XK_Left,   moveresize,  {.v = "-25x 0y 0w 0h"} },
+    {  MODKEY|ShiftMask,    XK_Down,   moveresize,  {.v = "0x 0y 0w 25h"} },
+    {  MODKEY|ShiftMask,    XK_Up,     moveresize,  {.v = "0x 0y 0w -25h"} },
+    {  MODKEY|ShiftMask,    XK_Right,  moveresize,  {.v = "0x 0y 25w 0h"} },
+    {  MODKEY|ShiftMask,    XK_Left,   moveresize,  {.v = "0x 0y -25w 0h"} },
     // resize
     {  MODKEY,              XK_i,      incnmaster,     {.i = +1 } },
     {  MODKEY,              XK_d,      incnmaster,     {.i = -1 } },
     {  MODKEY,              XK_h,      setmfact,       {.f = -0.05} },
     {  MODKEY,              XK_l,      setmfact,       {.f = +0.05} },
     // layout
-    { MODKEY,               XK_t,      setlayout,      {.v = &layouts[0]} },
-    { MODKEY,               XK_f,      setlayout,      {.v = &layouts[1]} },
-    { MODKEY,               XK_m,      setlayout,      {.v = &layouts[2]} },
+    {  MODKEY,              XK_t,      setlayout,      {.v = &layouts[0]} },
+    {  MODKEY,              XK_f,      setlayout,      {.v = &layouts[1]} },
+    {  MODKEY,              XK_m,      setlayout,      {.v = &layouts[2]} },
     {  MODKEY,              XK_space,  setlayout,       {0}  },
     {  MODKEY|ShiftMask,    XK_space,  togglefloating,  {0}  },
     // others
-    {  MODKEY,              XK_0,       view,      {.ui  =  ~0  }  },
-    {  MODKEY|ShiftMask,    XK_0,       tag,       {.ui  =  ~0  }  },
-    {  MODKEY,              XK_comma,   focusmon,  {.i   =  -1  }  },
-    {  MODKEY,              XK_period,  focusmon,  {.i   =  +1  }  },
-    {  MODKEY|ShiftMask,    XK_comma,   tagmon,    {.i   =  -1  }  },
-    {  MODKEY|ShiftMask,    XK_period,  tagmon,    {.i   =  +1  }  },
+    {  MODKEY,              XK_0,      view,      {.ui  =  ~0  }  },
+    {  MODKEY|ShiftMask,    XK_0,      tag,       {.ui  =  ~0  }  },
+    {  MODKEY,              XK_comma,  focusmon,  {.i   =  -1  }  },
+    {  MODKEY,              XK_period, focusmon,  {.i   =  +1  }  },
+    {  MODKEY|ShiftMask,    XK_comma,  tagmon,    {.i   =  -1  }  },
+    {  MODKEY|ShiftMask,    XK_period, tagmon,    {.i   =  +1  }  },
     TAGKEYS(                        XK_1,                      0)
     TAGKEYS(                        XK_2,                      1)
     TAGKEYS(                        XK_3,                      2)
