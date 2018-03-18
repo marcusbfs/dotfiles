@@ -35,18 +35,10 @@ dotfiles:
     dst: ~/.config/mpd
     link: true
     src: .config/mpd
-  d_mpdlt:
-    dst: ~/.config/mpd
-    link: true
-    src: .config/mpdlt
   d_ncmpcpp:
     dst: ~/.ncmpcpp
     link: true
     src: .ncmpcpp
-  d_ncmpcpplt:
-    dst: ~/.ncmpcpp
-    link: true
-    src: .ncmpcpplt
   d_ranger:
     dst: ~/.config/ranger
     link: true
@@ -141,6 +133,8 @@ profiles:
     #- d_vim
     - d_w3m
     - d_qutebrowser
+    - d_mpd
+    - d_ncmpcpp
     - f_Xdefaults
     - f_Xresources
     - f_spacemacs
@@ -152,8 +146,6 @@ profiles:
   laptop:
     dotfiles:
     #- d_i3lt
-    - d_mpdlt
-    - d_ncmpcpplt
     - f_tmux.conflt
     - f_tmux.conf.locallt
     - f_startupappslt
@@ -162,8 +154,6 @@ profiles:
   mrcspc:
     dotfiles:
     #- d_i3
-    - d_mpd
-    - d_ncmpcpp
     - f_tmux.conf
     - f_tmux.conf.local
     - f_startupapps
