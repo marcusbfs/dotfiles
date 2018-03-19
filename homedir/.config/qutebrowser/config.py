@@ -17,6 +17,7 @@ c.aliases = {'w': 'session-save',
         'ghm': 'open https://github.com/mrcsbrn',
         'ip': 'open 192.168.1.1',
         'bib': 'open http://www.biblioteca.ufla.br/pergamum/biblioteca_s/php/login_usu.php?flag=index.php',
+        'cv': 'open https://acesso.ufla.br/sso/login?service=https%3A%2F%2Fcampusvirtual.ufla.br%2Fpresencial%2Flogin%2Findex.php%3FauthCAS%3DCAS',
         }
 
 # Always restore open sites when qutebrowser is reopened.
@@ -74,4 +75,3 @@ config.bind(',f', 'spawn firefox {url}')
 config.bind(',F', 'hint links spawn firefox {hint-url}')
 config.bind(',t', 'hint links spawn transmission-remote --add {hint-url}')
 config.bind(',g', 'open --tab {primary}', mode='normal')
-
