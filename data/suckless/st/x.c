@@ -619,6 +619,9 @@ selrequest(XEvent *e)
 void
 setsel(char *str, Time t)
 {
+	if (!str)
+		return;
+
 	free(xsel.primary);
 	xsel.primary = str;
 
