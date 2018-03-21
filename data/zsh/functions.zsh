@@ -79,7 +79,7 @@ cmkdir(){ mkdir -p "$@" && builtin cd "$@"; }
 surfraw(){ /usr/bin/surfraw -browser=$BROWSER $@ ;}
 sr(){ /usr/bin/sr -browser=$BROWSERCLI $@ ; }
 givegit(){ git clone https://github.com/$1.git ;}
-weather(){curl -s wttr.in | sed -n "1,7p";}
+weather(){ curl -s wttr.in | sed -n "1,7p";}
 bigfiles(){
     if [ $# -eq 1 ]; then
         du -hsx "$1"/* | sort -rh | head -10
@@ -194,9 +194,9 @@ sr(){ /usr/bin/sr -browser=$BROWSERCLI $@ ; }
 # =============================================================================
 
 # aur manager =================================================================
-uu(){$_aurmanager -Syu "$@";}
-npac(){$_aurmanager --noedit --noconfirm --needed -S "$@";}
-pacs(){$_aurmanager -Ss "$@";}
+uu(){ $_aurmanager -Syu "$@";}
+npac(){ $_aurmanager --noedit --noconfirm --needed -S "$@";}
+pacs(){ $_aurmanager -Ss "$@";}
 pacq(){
     if which ag >/dev/null 2>&1; then
         $_aurmanager -Q | ag "$@"
@@ -221,12 +221,12 @@ ezthumb-movie (){
 rsync-ssh () { rsync -avzh -e "ssh -p $1" $(realpath $2) $3@$4:$5;}
 
 # Reload files ================================================================
-rld-syncaf (){$(which python3) $(realpath ~/.scripts/syncaf.py);}
+rld-syncaf (){ $(which python3) $(realpath ~/.scripts/syncaf.py);}
 rld-zshrc (){ source $(realpath ~/.zshrc);}
 rld-zfunctions (){ source $(realpath $_dotfiles_path/data/zsh/functions.zsh) ;}
-rld-font () {fc-cache -v -f;}
-rld-tmux () {tmux source-file ~/.tmux.conf;}
-rld-Xdefaults () {xrdb -load ~/.Xdefaults;}
+rld-font () { fc-cache -v -f;}
+rld-tmux () { tmux source-file ~/.tmux.conf;}
+rld-Xdefaults () { xrdb -load ~/.Xdefaults;}
 # =============================================================================
 
 
