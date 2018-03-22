@@ -5,7 +5,7 @@
 img=${HOME}/workspace/outros/dotfiles/data/my-pomodoro/pink.jpg
 sound_notification=/usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga
 
-short_interval_time="5s"
+short_interval_time="5m"
 long_interval_time="15m"
 pomodoro_time="25m"
 
