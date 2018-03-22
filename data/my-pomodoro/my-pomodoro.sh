@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
-DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-img=$DIR/pink.jpg
+#DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+#img=$DIR/pink.jpg
+img=${HOME}/workspace/outros/dotfiles/data/my-pomodoro/pink.jpg
 sound_notification=/usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga
 
-short_interval_time="5m"
+short_interval_time="5s"
 long_interval_time="15m"
 pomodoro_time="25m"
 
@@ -46,6 +47,6 @@ esac
 
 echo "$start_phrase"
 date
-sleep "$timer" && (feh -F "$img" &) && (paplay --volume=40000 $sound_notification &)
+sleep "$timer" && (feh -F "$img" &) && (paplay --volume=35000 $sound_notification &)
 date
 echo "$end_phrase"" finished"
