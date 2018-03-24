@@ -16,6 +16,7 @@ usage() {
     echo "$(no-point $0) -p: pomodoro ($pomodoro_time)"
     echo "$(no-point $0) -i: short interval ($short_interval_time)"
     echo "$(no-point $0) -l: long interval ($long_interval_time)"
+    echo "$(no-point $0) -c TIME: custom interval"
     exit 1
 }
 
@@ -37,6 +38,11 @@ case "$1" in
     timer=$long_interval_time
     end_phrase="long interval finished"
     ;;
+-c)
+    start_phrase="starting custom interval"
+    timer=$2
+    end_phrase="custom interval finished"
+    ;;
 -h)
     usage
     ;;
@@ -47,6 +53,6 @@ esac
 
 echo "$start_phrase"
 date
-sleep "$timer" && (feh -F "$img" &) && (paplay --volume=35000 $sound_notification &)
+sleep "$timer" && (feh -F "$img" &) && (paplay --volume=30000 $sound_notification &)
 date
 echo "$end_phrase"" finished"
