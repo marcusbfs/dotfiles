@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int start_with_gap = 1;
+static const unsigned int start_with_gap = 0;
 static const unsigned int gap_px = 20; /* gap pixel between windows */
 static const unsigned int borderpx  = 5;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
@@ -16,7 +16,7 @@ static const int viewontag          = 1;     /* Switch view on tag switch */
 static const char *fonts[]          = { SAME_FONT };
 static const char dmenufont[]       = SAME_FONT;
 
-#include "themes/selgray.c"
+#include "themes/dark-green.c"
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
@@ -36,6 +36,8 @@ static const Rule rules[] = {
 };
 
 /* layout(s) */
+#include "gaplessgrid.c"
+
 static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
@@ -45,6 +47,7 @@ static const Layout layouts[] = {
 	{ "[]=",      tile },    /* first entry is default */
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
+	{ "###",      gaplessgrid },
 };
 
 /* key definitions */
@@ -71,7 +74,9 @@ static const char *termcmd[]  = { "st", NULL };
 
 #include "movestack.c"
 #include "moveresize.c"
+#include "togglefullscreen.c"
 #include <X11/XF86keysym.h>
+
 static Key keys[] = {
     /* modifier                     key        function        argument */
     // cmds
@@ -113,8 +118,10 @@ static Key keys[] = {
     {  MODKEY|ShiftMask,    XK_Left,   moveresize,     {.v = "0x 0y -25w 0h"} },
     // layout
     {  MODKEY,              XK_t,      setlayout,      {.v = &layouts[0]} },
-    {  MODKEY,              XK_f,      setlayout,      {.v = &layouts[1]} },
+    {  MODKEY|ShiftMask,    XK_f,      setlayout,      {.v = &layouts[1]} },
     {  MODKEY,              XK_m,      setlayout,      {.v = &layouts[2]} },
+    {  MODKEY,              XK_g,      setlayout,      {.v = &layouts[3]} },
+    {  MODKEY,              XK_f,      togglefullscreen,{0} },
     {  MODKEY,              XK_space,  setlayout,       {0}  },
     {  MODKEY|ShiftMask,    XK_space,  togglefloating,  {0}  },
     // others
