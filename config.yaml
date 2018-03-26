@@ -123,6 +123,10 @@ dotfiles:
     dst: ~/.xinitrc
     link: true
     src: .xinitrc
+  f_compton:
+    dst: ~/.config/compton.conf
+    link: true
+    src: .config/compton.conf
 profiles:
   base:
     dotfiles:
@@ -143,6 +147,7 @@ profiles:
     - f_gitconfig
     - f_zprofile
     - f_xinitrc
+    - f_compton
   laptop:
     dotfiles:
     #- d_i3lt
