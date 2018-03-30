@@ -8,17 +8,6 @@ _dotfiles_path=${HOME}/workspace/outros/dotfiles
 # Chech if programs exists. Dot not remove this function
 _exists(){ which "$1" >/dev/null 2>&1; }
 
-python-polyglot(){
-#uso: python-polyglot "# P=" ./nhau "hw()"
-    sep="$1"
-    file="$2"
-    funcname="$3" # deve ser do tipo hw()
-    line_number=$(cat $file | grep "$sep" -n | awk -F':' '{printf $1}')
-    line_number=$((1 + $line_number))
-    echo $line_number
-    tail -n +$line_number $file | cut -c5- | sed "\$ a $funcname" | python3
-}
-
 # suckless ====================================================================
 cp-st() {cp -r $_dotfiles_path/data/suckless/st .}
 cp-dwm() {cp -r $_dotfiles_path/data/suckless/dwm .}
@@ -119,7 +108,6 @@ display-truecolors(){
 # =============================================================================
 
 
-
 # att hosts file ==============================================================
 att-hosts(){
 webfile="https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn/hosts"
@@ -163,6 +151,87 @@ fe80::1%lo0 localhost
 0.0.0.0 spclient.wg.spotify.com
 0.0.0.0 upgrade.spotify.com
 # — Spotify Ads Block End
+
+# — Youtube Shit Block
+0.0.0.0 redirector.googlevideo.com
+0.0.0.0 r3---sn-hp57knsl.googlevideo.com
+0.0.0.0 r6---sn-vgqseney.googlevideo.com
+0.0.0.0 r5---sn-hp57kn6e.googlevideo.com
+0.0.0.0 r2---sn-hp57yne7.googlevideo.com
+0.0.0.0 r7---sn-8p8v-bg0d.googlevideo.com
+0.0.0.0 r8---sn-8p8v-bg0d.googlevideo.com
+0.0.0.0 r4---sn-vgqs7nez.googlevideo.com
+0.0.0.0 r4.sn-vgqs7nez.googlevideo.com
+0.0.0.0 www.youtube-nocookie.com
+0.0.0.0 i1.ytimg.com
+0.0.0.0 r17---sn-vgqsenes.googlevideo.com
+0.0.0.0 r2---sn-vgqs7n7k.googlevideo.com
+0.0.0.0 clients6.google.com
+0.0.0.0 r1---sn-vgqsen7z.googlevideo.com
+0.0.0.0 r1.sn-vgqsen7z.googlevideo.com
+0.0.0.0 r20---sn-vgqs7ne7.googlevideo.com
+0.0.0.0 r20.sn-vgqs7ne7.googlevideo.com
+0.0.0.0 pagead2.googlesyndication.com
+0.0.0.0 youtube.com/api/stats/ads
+0.0.0.0 ads.doubleclick.net
+0.0.0.0 s.ytimg.com
+0.0.0.0 ad.youtube.com
+0.0.0.0 ads.youtube.com
+0.0.0.0 www.gstatic.com
+0.0.0.0 gstatic.com
+0.0.0.0 clients1.google.com
+0.0.0.0 dts.innovid.com
+0.0.0.0 googleads.g.doubleclick.net
+0.0.0.0 googleads4.g.doubleclick.net
+0.0.0.0 pagead2.googlesyndication.com
+0.0.0.0 pixel.moatads.com
+0.0.0.0 rtd.tubemogul.com
+0.0.0.0 s.youtube.com
+0.0.0.0 s.innovid.com
+0.0.0.0 pubads.g.doubleclick.net
+0.0.0.0 ssl.google-analytics.com
+0.0.0.0 www-google-analytics.l.google.com
+0.0.0.0 stats.g.doubleclick.net
+0.0.0.0 clients.l.google.com
+0.0.0.0 pagead.l.doubleclick.net
+0.0.0.0 www-googletagmanager.l.google.com
+0.0.0.0 googleadapis.l.google.com
+0.0.0.0 s0.2mdn.net
+0.0.0.0 googleads.g.doubleclick.net
+0.0.0.0 ad.doubleclick.net
+0.0.0.0 files.adform.net
+0.0.0.0 secure-ds.serving-sys.com
+0.0.0.0 securepubads.g.doubleclick.net
+0.0.0.0 s.youtube.com
+0.0.0.0 apis.google.com
+0.0.0.0 2975c.v.fwmrm.net
+0.0.0.0 static.doubleclick.net
+0.0.0.0 googleadservices.com
+0.0.0.0 ad-g.doubleclick.net
+0.0.0.0 ad.doubleclick.net
+0.0.0.0 ad.mo.doubleclick.net
+0.0.0.0 doubleclick.net
+0.0.0.0 googleads.g.doubleclick.net
+0.0.0.0 pagead.googlesyndication.com
+0.0.0.0 pagead1.googlesyndication.com
+0.0.0.0 pagead2.googlesyndication.com
+0.0.0.0 www.googleadservices.com
+0.0.0.0 youtube-nocookie.com
+0.0.0.0 www.youtube-nocookie.com
+0.0.0.0 analytic-google.com
+0.0.0.0 www.analytic-google.com
+0.0.0.0 www.googletagservices.com
+0.0.0.0 fwmrm.net
+0.0.0.0 innovid.com
+0.0.0.0 2mdn.net
+0.0.0.0 0.0.0.0
+0.0.0.0 fwmrm.net
+0.0.0.0 innovid.com
+0.0.0.0 2mdn.net
+0.0.0.0 akamaitechnologies.com
+0.0.0.0 akamaiedge.net
+0.0.0.0 ocsp.comodoca.com
+# — Youtube Shit Block End
 
 # MEU CUSTOM TERMINA AQUI
 
@@ -406,7 +475,6 @@ tsm-pause() { transmission-remote -t"$1" --stop ;}		# <id> or all
 tsm-start() { transmission-remote -t"$1" --start ;}		# <id> or all
 tsm-purge() { transmission-remote -t"$1" --remove-and-delete ;} # delete data also
 tsm-remove() { transmission-remote -t"$1" --remove ;}		# leaves data alone
-# tsm-info() { transmission-remote -t"$1" --info ;}
 tsm-speed() { while true;do clear; transmission-remote -t"$1" -i | grep Speed;sleep 1;done ;}
 tsm-grep() { transmission-remote --list | grep -i "$1" ;}
 tsm() { transmission-remote --list ;}
@@ -429,5 +497,3 @@ tsm-info(){
 # LINK: https://github.com/fagga/transmission-remote-cli
 # DESC: ncurses frontend to transmission-daemon
 tsm-ncurse() { transmission-remote-cli ;}
-
-#}}}
