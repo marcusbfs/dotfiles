@@ -267,7 +267,7 @@ sr(){ /usr/bin/sr -browser=$BROWSERCLI $@ ; }
 # =============================================================================
 
 # aur manager =================================================================
-uu(){ $_aurmanager -Syu "$@";}
+uu(){ $_aurmanager --noedit -Syu "$@";}
 npac(){ $_aurmanager --noedit --noconfirm --needed -S "$@";}
 pacs(){ $_aurmanager -Ss "$@";}
 pacq(){
