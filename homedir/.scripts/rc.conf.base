@@ -579,6 +579,7 @@ copytmap <ESC> q Q w <C-c>
 # My stuff
 map bg shell cp %f ~/.config/wall.jpg && feh --bg-scale ~/.config/wall.jpg
 map bG shell wal -tq -i %f -o wal-set && cp %f ~/.config/wall.jpg
+map bk bulkrename
 map dx shell dtrx %f
 map ry shell TS_SOCKET=/tmp/ranger tsp rsync -azvh %s %D
 #map rd shell TS_SOCKET=/tmp/ranger tsp rsync -azvh --remove-source-files %s %D && tsp find %s -type d -empty -exec rmdir {} \; && tsp rmdir %s
