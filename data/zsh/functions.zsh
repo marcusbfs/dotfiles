@@ -366,7 +366,7 @@ mvr() {
 #
 # sync windos-music mrcshd-music
 music-sync-HD () {
-    rsync -avh --progress --delete /media/win/Users/Marcus/Desktop/Media/Music /run/media/mrcsbrn/mrcshd/
+    rsync -avh --progress /media/win/Users/Marcus/Desktop/Media/Music /run/media/mrcsbrn/mrcshd/
 }
 
 
