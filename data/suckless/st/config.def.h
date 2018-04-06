@@ -5,7 +5,8 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "xos4 Terminus:style=Regular:size=12";
+//static char *font = "xos4 Terminus:style=Regular:size=12";
+static char *font = "-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso10646-1";
 static int borderpx = 2;
 
 /*
