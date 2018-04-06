@@ -10,7 +10,7 @@ clipmenud &
 #mpd &
 #transmission-daemon &
 udiskie -2 -t &
-synergyc 192.168.1.104 &
+#synergyc 192.168.1.104 &
 xfce4-power-manager &
 volumeicon &
 #redshift-gtk &
