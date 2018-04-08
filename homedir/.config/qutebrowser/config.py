@@ -66,7 +66,9 @@ c.url.searchengines = {'DEFAULT': 'https://www.google.com.br/search?q={}',
 # bindings
 _mpv_common = ' --autofit=1280x720 --volume=60 --geometry=50%:15% '
 _mpv_720 = 'mpv' + _mpv_common + '--ytdl-format="bestvideo[height<=?720][fps<=?30]+bestaudio/best"'
-_mpv_1080 = 'mpv ' + _mpv_common + '--ytdl-format="bestvideo[height<=?1080][fps<=?30]+bestaudio/best"'
+# _mpv_1080 = 'mpv ' + _mpv_common + '--ytdl-format="bestvideo[height<=?1080][fps<=?30]+bestaudio/best"'
+from os.path import expanduser
+_mpv_1080 = 'bash ' + expanduser('~') + '/.scripts/bin/dmpv.sh'
 config.bind(',v', 'hint links spawn tsp ' + _mpv_720 + ' {hint-url}')
 config.bind(',V', 'spawn tsp ' + _mpv_720 + ' {url}')
 config.bind(',b', 'hint links spawn tsp ' + _mpv_1080 + ' {hint-url}')
