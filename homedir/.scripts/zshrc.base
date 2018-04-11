@@ -79,11 +79,11 @@ alias wine-steam="wine ~/.wine/drive_c/Program\ Files\ \(x86\)/Steam/Steam.exe -
 alias temacs="emacs -nw"
 
 # Iniciar com tmux
-if [[ -z $TMUX ]] && pgrep X >/dev/null 2>&1; then
+#if [[ -z $TMUX ]] && pgrep X >/dev/null 2>&1; then
     if ! tmux list-sessions | grep -w 'base.*attached' 2>&1 >/dev/null ; then
         tmux attach -t base || tmux new-session -s base -c ~/workspace
     fi
-fi
+#fi
 
 # Plugins
 source $DOTFILES_ZSH/zsh-autosuggestions/zsh-autosuggestions.zsh
