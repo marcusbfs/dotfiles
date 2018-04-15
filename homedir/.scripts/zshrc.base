@@ -27,8 +27,7 @@ zstyle ':completion:*' rehash true
 # OpenFOAM
 autoload bashcompinit
 bashcompinit
-export FOAM_INST_DIR=$HOME/workspace/outros
-alias ofoam="autoload bashcompinit; bashcompinit; source $FOAM_INST_DIR/OpenFOAM-5.x/etc/bashrc"
+alias ofoam="source $HOME/workspace/outros/OpenFOAM-5.x/etc/bashrc"
 
 export DISPLAY=:0
 export LANG=pt_BR.UTF-8
