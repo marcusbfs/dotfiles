@@ -4,7 +4,6 @@ export DOTFILES_ZSH=~/workspace/outros/dotfiles/data/zsh
 source $DOTFILES_ZSH/preconfigs.zsh
 
 autoload -U compinit && compinit        # enable autocompletion
-fpath+=($DOTFILES_ZSH/completion.zsh)              # set path to custom autocompletion
 fpath=($DOTFILES_ZSH/zsh-completions/src $fpath) # set path to custom autocompletion
 zstyle ':completion:*' menu select      # to activate the menu, press tab twice
 #unsetopt menu_complete                  # do not autoselect the first completion entry
