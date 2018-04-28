@@ -23,4 +23,4 @@ xset -b
 xset s off -dpms
 compton &
 emacs &
-qutebrowser &
+firefox &
