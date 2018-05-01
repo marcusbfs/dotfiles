@@ -44,7 +44,7 @@ inst adobe-source-code-pro-fonts otf-font-awesome tamsyn-font ttf-dejavu ttf-ms-
 # Utilidades
 inst firefox udiskie feh sxiv-git sxiv-rifle tmux-git rsync silver-searcher-git
 inst ranger-git redshift redshift-gtk-git mupdf htop mpd ncmpcpp lyvi-git vim
-inst keepassxc gnome-screenshot neofetch volumeicon unclutter-xfixes-git
+inst keepassxc gnome-screenshot neofetch ncpamixer unclutter-xfixes-git
 sudo mv /usr/share/sounds/freedesktop/stereo/camera-shutter.oga /usr/share/sounds/freedesktop/stereo/camera-shutter.oga.orig
 inst dropbox network-manager-applet networkmanager
 inst urlview mpv qt4 task-spooler

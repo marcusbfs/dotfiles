@@ -84,6 +84,7 @@ static Key keys[] = {
     {  MODKEY,              XK_Return, spawn,  {.v  =  termcmd   }  },
     {  MODKEY,              XK_r,      spawn,  ESHCMD("st -e ranger") },
     {  MODKEY|ControlMask,  XK_g,      togglegaps, {0}},
+    {  MODKEY,              XK_a,      spawn,  ESHCMD("st -e ncpamixer")  },
     {  MODKEY|ShiftMask,    XK_a,      spawn,  scripts_bin_func("toggle-audio-output.py") },
     {  MODKEY|ShiftMask,    XK_x,      spawn,  scripts_bin_func("screen-lock.py")          },
     {  MODKEY,              XK_Print,  spawn,  ESHCMD("gnome-screenshot --interactive")       },

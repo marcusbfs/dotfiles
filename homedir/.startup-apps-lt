@@ -12,7 +12,7 @@ clipmenud &
 udiskie -2 -t &
 #synergyc 192.168.1.104 &
 xfce4-power-manager &
-volumeicon &
+#volumeicon &
 #redshift-gtk &
 redshift -l -21.27:-45.04 -t 6500:4500 &
 dropbox start &

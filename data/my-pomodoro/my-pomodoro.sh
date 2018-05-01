@@ -55,4 +55,4 @@ echo "$start_phrase"
 date
 sleep "$timer" && (feh -F "$img" &) && (paplay --volume=30000 $sound_notification &)
 date
-echo "$end_phrase"" finished"
+echo "$end_phrase"

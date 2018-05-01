@@ -11,7 +11,7 @@ clipmenud &
 #mpd &
 transmission-daemon &
 udiskie -2 -t &
-volumeicon &
+#volumeicon &
 #redshift-gtk &
 redshift -l -21.27:-45.04 -t 6500:4500 &
 dropbox start &
