@@ -37,7 +37,7 @@ In order to build slstatus you need the Xlib header files.
 Installation
 ------------
 Edit config.mk to match your local setup (slstatus is installed into the
-/usr/local namespace by default).
+/usr/local namespace by default). Uncomment OSSLIBS on OpenBSD.
 
 Afterwards enter the following command to build and install slstatus (if
 necessary as root):
@@ -62,9 +62,7 @@ Porting to OpenBSD is the current goal before thinking about a release.
 
 The following functions are not portable at the moment:
 - wifi_{perc,essid}
-- cpu_{freq,perc,iowait}
+- cpu_{perc,iowait}
 - entropy
 - swap_{free,perc,total,used}
 - battery_{power,state}
-- temp
-- vol_perc
