@@ -577,7 +577,7 @@ tmap <ESC> taskview_close
 copytmap <ESC> q Q w <C-c>
 
 # My stuff
-map bg shell cp %f ~/.config/wall.jpg && feh --bg-scale ~/.config/wall.jpg
+map bg shell [ -f ~/.config/wall.jpg ] && mv ~/.config/wall.jpg ~/wall.jpg.older; cp %f ~/.config/wall.jpg && feh --bg-scale ~/.config/wall.jpg; [ -f ~/wall.jpg.older ] && mv ~/wall.jpg.older ~/.config/wall.jpg.older
 map bG shell wal -tq -i %f -o wal-set && cp %f ~/.config/wall.jpg
 map bk bulkrename
 map dx shell dtrx %f
