@@ -6,7 +6,7 @@ slstatus is a suckless status monitor for window managers that use WM_NAME
 
 Features
 --------
-- Battery percentage/power/state
+- Battery percentage/state
 - CPU usage
 - CPU frequency
 - CPU iowait
@@ -65,4 +65,3 @@ The following functions are not portable at the moment:
 - cpu_{perc,iowait}
 - entropy
 - swap_{free,perc,total,used}
-- battery_{power,state}

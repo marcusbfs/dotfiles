@@ -21,18 +21,6 @@
 	}
 
 	const char *
-	battery_power(const char *bat)
-	{
-		int watts;
-		char path[PATH_MAX];
-
-		snprintf(path, sizeof(path), "%s%s%s", "/sys/class/power_supply/",
-		         bat, "/power_now");
-		return (pscanf(path, "%i", &watts) == 1) ?
-		       bprintf("%d", (watts + 500000) / 1000000) : NULL;
-	}
-
-	const char *
 	battery_state(const char *bat)
 	{
 		struct {
@@ -42,7 +30,6 @@
 			{ "Charging",    "+" },
 			{ "Discharging", "-" },
 			{ "Full",        "=" },
-			{ "Unknown",     "/" },
 		};
 		size_t i;
 		char path[PATH_MAX], state[12];
@@ -87,5 +74,41 @@
 		close(fd);
 
 		return bprintf("%d", apm_info.battery_life);
+	}
+
+	const char *
+	battery_state(const char *bat)
+	{
+		int fd;
+		size_t i;
+		struct apm_power_info apm_info;
+		struct {
+			unsigned int state;
+			char *symbol;
+		} map[] = {
+			{ APM_AC_ON,      "+" },
+			{ APM_AC_OFF,     "-" },
+		};
+
+		fd = open("/dev/apm", O_RDONLY);
+		if (fd < 0) {
+			fprintf(stderr, "open '/dev/apm': %s\n", strerror(errno));
+			return NULL;
+		}
+
+		if (ioctl(fd, APM_IOC_GETPOWER, &apm_info) < 0) {
+			fprintf(stderr, "ioctl 'APM_IOC_GETPOWER': %s\n",
+			        strerror(errno));
+			close(fd);
+			return NULL;
+		}
+		close(fd);
+
+		for (i = 0; i < LEN(map); i++) {
+			if (map[i].state == apm_info.ac_state) {
+				break;
+			}
+		}
+		return (i == LEN(map)) ? "?" : map[i].symbol;
 	}
 #endif
