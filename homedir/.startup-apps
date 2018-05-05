@@ -9,7 +9,7 @@ slstatus &
 #nm-applet &
 clipmenud &
 #mpd &
-transmission-daemon &
+#transmission-daemon &
 udiskie -2 -t &
 #volumeicon &
 #redshift-gtk &

@@ -84,7 +84,6 @@ unsigned int tabspaces = 8;
 
 /* Terminal colors (16 first used in escape sequence) */
 #include "/home/mrcsbrn/.cache/wal/colors-wal-st.h"
-unsigned int defaultrcs = 0;
 
 /*
  * Default shape of cursor
