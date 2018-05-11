@@ -14,5 +14,10 @@
 		       bprintf("%d", num) : NULL;
 	}
 #elif defined(__OpenBSD__)
-	/* unimplemented */
+	const char *
+	entropy(void)
+	{
+		/* Unicode Character 'INFINITY' (U+221E) */
+		return "\xe2\x88\x9e";
+	}
 #endif

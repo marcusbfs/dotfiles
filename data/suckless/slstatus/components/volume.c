@@ -1,14 +1,14 @@
 /* See LICENSE file for copyright and license details. */
 #include <errno.h>
 #include <fcntl.h>
-#if defined(__OpenBSD__)
-# include <soundcard.h>
-#else
-# include <sys/soundcard.h>
-#endif
-#include <sys/ioctl.h>
 #include <stdio.h>
 #include <string.h>
+#if defined(__OpenBSD__)
+	#include <soundcard.h>
+#else
+	#include <sys/soundcard.h>
+#endif
+#include <sys/ioctl.h>
 #include <unistd.h>
 
 #include "../util.h"
@@ -20,21 +20,22 @@ vol_perc(const char *card)
 	int v, afd, devmask;
 	char *vnames[] = SOUND_DEVICE_NAMES;
 
-	afd = open(card, O_RDONLY | O_NONBLOCK);
-	if (afd == -1) {
+	if ((afd = open(card, O_RDONLY | O_NONBLOCK)) < 0) {
 		fprintf(stderr, "open '%s': %s\n", card, strerror(errno));
 		return NULL;
 	}
 
-	if (ioctl(afd, (int)SOUND_MIXER_READ_DEVMASK, &devmask) == -1) {
-		fprintf(stderr, "ioctl 'SOUND_MIXER_READ_DEVMASK': %s\n", strerror(errno));
+	if (ioctl(afd, (int)SOUND_MIXER_READ_DEVMASK, &devmask) < 0) {
+		fprintf(stderr, "ioctl 'SOUND_MIXER_READ_DEVMASK': %s\n",
+		        strerror(errno));
 		close(afd);
 		return NULL;
 	}
 	for (i = 0; i < LEN(vnames); i++) {
 		if (devmask & (1 << i) && !strcmp("vol", vnames[i])) {
-			if (ioctl(afd, MIXER_READ(i), &v) == -1) {
-				fprintf(stderr, "ioctl 'MIXER_READ(%d)': %s\n", i, strerror(errno));
+			if (ioctl(afd, MIXER_READ(i), &v) < 0) {
+				fprintf(stderr, "ioctl 'MIXER_READ(%d)': %s\n", i,
+				        strerror(errno));
 				close(afd);
 				return NULL;
 			}

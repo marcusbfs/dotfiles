@@ -16,13 +16,13 @@ disk_free(const char *mnt)
 		return NULL;
 	}
 
-	return bprintf("%f", (float)fs.f_bsize * (float)fs.f_bfree / 1024 / 1024 / 1024);
+	return bprintf("%f",
+	               (float)fs.f_bsize * (float)fs.f_bfree / 1024 / 1024 / 1024);
 }
 
 const char *
 disk_perc(const char *mnt)
 {
-	int perc;
 	struct statvfs fs;
 
 	if (statvfs(mnt, &fs) < 0) {
@@ -30,9 +30,8 @@ disk_perc(const char *mnt)
 		return NULL;
 	}
 
-	perc = 100 * (1.0f - ((float)fs.f_bfree / (float)fs.f_blocks));
-
-	return bprintf("%d", perc);
+	return bprintf("%d", (int)(100 *
+	               (1.0f - ((float)fs.f_bfree / (float)fs.f_blocks))));
 }
 
 const char *
@@ -45,7 +44,8 @@ disk_total(const char *mnt)
 		return NULL;
 	}
 
-	return bprintf("%f", (float)fs.f_bsize * (float)fs.f_blocks / 1024 / 1024 / 1024);
+	return bprintf("%f",
+	               (float)fs.f_bsize * (float)fs.f_blocks / 1024 / 1024 / 1024);
 }
 
 const char *
@@ -58,5 +58,7 @@ disk_used(const char *mnt)
 		return NULL;
 	}
 
-	return bprintf("%f", (float)fs.f_bsize * ((float)fs.f_blocks - (float)fs.f_bfree) / 1024 / 1024 / 1024);
+	return bprintf("%f",
+	               (float)fs.f_bsize * ((float)fs.f_blocks -
+	               (float)fs.f_bfree) / 1024 / 1024 / 1024);
 }

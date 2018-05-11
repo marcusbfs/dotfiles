@@ -53,9 +53,10 @@ main(int argc, char *argv[])
 	struct sigaction act;
 	struct timespec start, current, diff, intspec, wait;
 	size_t i, len;
-	int sflag = 0;
+	int sflag;
 	char status[MAXLEN];
 
+	sflag = 0;
 	ARGBEGIN {
 		case 's':
 			sflag = 1;
@@ -97,6 +98,7 @@ main(int argc, char *argv[])
 
 		if (sflag) {
 			printf("%s\n", status);
+			fflush(stdout);
 		} else {
 			XStoreName(dpy, DefaultRootWindow(dpy), status);
 			XSync(dpy, False);

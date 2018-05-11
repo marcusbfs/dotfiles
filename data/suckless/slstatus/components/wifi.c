@@ -2,10 +2,10 @@
 #if defined(__linux__)
 	#include <errno.h>
 	#include <ifaddrs.h>
+	#include <limits.h>
 	#include <linux/wireless.h>
 	#include <sys/socket.h>
 	#include <stdio.h>
-	#include <limits.h>
 	#include <string.h>
 	#include <sys/ioctl.h>
 	#include <unistd.h>
@@ -16,7 +16,6 @@
 	wifi_perc(const char *iface)
 	{
 		int i, cur;
-		float perc;
 		int total = 70; /* the max of /proc/net/wireless */
 		char *p, *datastart;
 		char path[PATH_MAX];
@@ -47,19 +46,19 @@
 				break;
 		}
 		fclose(fp);
-		if (i < 2 || !p)
+		if (i < 2 || !p) {
 			return NULL;
+		}
 
-		if ((datastart = strstr(buf, iface)) == NULL)
+		if (!(datastart = strstr(buf, iface))) {
 			return NULL;
+		}
 
 		datastart = (datastart+(strlen(iface)+1));
 		sscanf(datastart + 1, " %*d   %d  %*d  %*d\t\t  %*d\t   "
 		       "%*d\t\t%*d\t\t %*d\t  %*d\t\t %*d", &cur);
 
-		perc = (float)cur / total * 100.0;
-
-		return bprintf("%.0f", perc);
+		return bprintf("%d", (int)((float)cur / total * 100));
 	}
 
 	const char *
@@ -73,23 +72,23 @@
 		wreq.u.essid.length = IW_ESSID_MAX_SIZE+1;
 		snprintf(wreq.ifr_name, sizeof(wreq.ifr_name), "%s", iface);
 
-		if (sockfd == -1) {
+		if (sockfd < 0) {
 			fprintf(stderr, "socket 'AF_INET': %s\n",
 			        strerror(errno));
 			return NULL;
 		}
 		wreq.u.essid.pointer = id;
-		if (ioctl(sockfd,SIOCGIWESSID, &wreq) == -1) {
-			fprintf(stderr, "ioctl 'SIOCGIWESSID': %s\n",
-			        strerror(errno));
+		if (ioctl(sockfd,SIOCGIWESSID, &wreq) < 0) {
+			fprintf(stderr, "ioctl 'SIOCGIWESSID': %s\n", strerror(errno));
 			close(sockfd);
 			return NULL;
 		}
 
 		close(sockfd);
 
-		if (strcmp(id, "") == 0)
+		if (!strcmp(id, "")) {
 			return NULL;
+		}
 
 		return id;
 	}

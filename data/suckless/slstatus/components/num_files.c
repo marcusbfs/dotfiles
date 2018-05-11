@@ -1,6 +1,6 @@
 /* See LICENSE file for copyright and license details. */
-#include <errno.h>
 #include <dirent.h>
+#include <errno.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -11,16 +11,18 @@ num_files(const char *dir)
 {
 	struct dirent *dp;
 	DIR *fd;
-	int num = 0;
+	int num;
 
-	if ((fd = opendir(dir)) == NULL) {
+	if (!(fd = opendir(dir))) {
 		fprintf(stderr, "opendir '%s': %s\n", dir, strerror(errno));
 		return NULL;
 	}
 
-	while ((dp = readdir(fd)) != NULL) {
-		if (!strcmp(dp->d_name, ".") || !strcmp(dp->d_name, ".."))
+	num = 0;
+	while ((dp = readdir(fd))) {
+		if (!strcmp(dp->d_name, ".") || !strcmp(dp->d_name, "..")) {
 			continue; /* skip self and parent */
+		}
 		num++;
 	}
 
