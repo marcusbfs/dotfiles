@@ -28,6 +28,11 @@ let g:pymode_python = 'python3'
 set shell=/usr/bin/zsh
 
 "--- Remaps e funções ---"
+" easyalign maps
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)"
 noremap <leader>u :w<Home>silent <End> !urlview<CR>
 autocmd Filetype rmd map <F5> :!echo<space>"require(rmarkdown);<space>render('<c-r>%')"<space>\|<space>R<space>--vanilla<enter>
 nnoremap ; :
