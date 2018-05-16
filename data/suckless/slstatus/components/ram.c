@@ -59,6 +59,9 @@
 	#include <sys/types.h>
 	#include <unistd.h>
 
+	#define LOG1024 	10
+	#define pagetok(size, pageshift) ((size) << (pageshift - LOG1024))
+
 	inline int
 	load_uvmexp(struct uvmexp *uvmexp)
 	{
@@ -79,8 +82,7 @@
 
 		if (load_uvmexp(&uvmexp)) {
 			free_pages = uvmexp.npages - uvmexp.active;
-			free = (double) (free_pages * uvmexp.pagesize) / 1024 /
-			       1024 / 1024;
+			free = (float)(pagetok(free_pages, uvmexp.pageshift)) / 1024 / 1024;
 			return bprintf("%f", free);
 		}
 
@@ -108,8 +110,7 @@
 		float total;
 
 		if (load_uvmexp(&uvmexp)) {
-			total = (double) (uvmexp.npages * uvmexp.pagesize) /
-			        1024 / 1024 / 1024;
+			total = (float)(pagetok(uvmexp.npages, uvmexp.pageshift)) / 1024 / 1024;
 			return bprintf("%f", total);
 		}
 
@@ -123,8 +124,7 @@
 		float used;
 
 		if (load_uvmexp(&uvmexp)) {
-			used = (double) (uvmexp.active * uvmexp.pagesize) /
-			       1024 / 1024 / 1024;
+			used = (float)(pagetok(uvmexp.active, uvmexp.pageshift)) / 1024 / 1024;
 			return bprintf("%f", used);
 		}
 

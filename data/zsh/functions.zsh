@@ -14,6 +14,7 @@ cp-dwm() {cp -r $_dotfiles_path/data/suckless/dwm .}
 cp-dmenu() {cp -r $_dotfiles_path/data/suckless/dmenu .}
 cp-ricer() {cp -r $_dotfiles_path/data/ricer .}
 # =============================================================================
+curl-patch() {curl "$1" | patch -p1}
 
 # templates ===================================================================
 ctemplate(){
