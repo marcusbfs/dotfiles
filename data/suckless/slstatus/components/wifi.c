@@ -1,16 +1,17 @@
 /* See LICENSE file for copyright and license details. */
+#include <errno.h>
+#include <ifaddrs.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
+
+#include "../util.h"
+
 #if defined(__linux__)
-	#include <errno.h>
-	#include <ifaddrs.h>
 	#include <limits.h>
 	#include <linux/wireless.h>
-	#include <sys/socket.h>
-	#include <stdio.h>
-	#include <string.h>
-	#include <sys/ioctl.h>
-	#include <unistd.h>
-
-	#include "../util.h"
 
 	const char *
 	wifi_perc(const char *iface)
@@ -93,5 +94,73 @@
 		return id;
 	}
 #elif defined(__OpenBSD__)
-	/* unimplemented */
+	#include <net/if.h>
+	#include <net/if_media.h>
+	#include <net80211/ieee80211.h>
+	#include <net80211/ieee80211_ioctl.h>
+	#include <stdlib.h>
+	#include <sys/types.h>
+
+	static int
+	load_ieee80211_nodereq(const char *iface, struct ieee80211_nodereq *nr)
+	{
+		struct ieee80211_bssid bssid;
+		int sockfd;
+
+		memset(&bssid, 0, sizeof(bssid));
+		memset(nr, 0, sizeof(struct ieee80211_nodereq));
+		if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+			fprintf(stderr, "socket 'AF_INET': %s\n",
+				strerror(errno));
+			return 0;
+		}
+		strlcpy(bssid.i_name, iface, sizeof(bssid.i_name));
+		if ((ioctl(sockfd, SIOCG80211BSSID, &bssid)) < 0) {
+			fprintf(stderr, "ioctl 'SIOCG80211BSSID': %s\n",
+				strerror(errno));
+			close(sockfd);
+			return 0;
+		}
+		strlcpy(nr->nr_ifname, iface, sizeof(nr->nr_ifname));
+		memmove(&nr->nr_macaddr, bssid.i_bssid, sizeof(nr->nr_macaddr));
+		if ((ioctl(sockfd, SIOCG80211NODE, nr)) < 0 && nr->nr_rssi) {
+			fprintf(stderr, "ioctl 'SIOCG80211NODE': %s\n",
+				strerror(errno));
+			close(sockfd);
+			return 0;
+		}
+
+		return close(sockfd), 1;
+	}
+
+	const char *
+	wifi_perc(const char *iface)
+	{
+		struct ieee80211_nodereq nr;
+		int q;
+
+		if (load_ieee80211_nodereq(iface, &nr)) {
+			if (nr.nr_max_rssi) {
+				q = IEEE80211_NODEREQ_RSSI(&nr);
+			} else {
+				q = nr.nr_rssi >= -50 ? 100 : (nr.nr_rssi <= -100 ? 0 :
+				(2 * (nr.nr_rssi + 100)));
+			}
+			return bprintf("%d", q);
+		}
+
+		return NULL;
+	}
+
+	const char *
+	wifi_essid(const char *iface)
+	{
+		struct ieee80211_nodereq nr;
+
+		if (load_ieee80211_nodereq(iface, &nr)) {
+			return bprintf("%s", nr.nr_nwid);
+		}
+
+		return NULL;
+	}
 #endif
