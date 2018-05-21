@@ -3,6 +3,7 @@
 /* battery */
 const char *battery_perc(const char *);
 const char *battery_state(const char *);
+const char *battery_remaining(const char*);
 
 /* cpu */
 const char *cpu_freq(void);
@@ -35,6 +36,10 @@ const char *keyboard_indicators(void);
 
 /* load_avg */
 const char *load_avg(const char *);
+
+/* netspeeds */
+const char *netspeed_rx(const char *);
+const char *netspeed_tx(const char *);
 
 /* num_files */
 const char *num_files(const char *);

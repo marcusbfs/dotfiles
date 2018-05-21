@@ -6,20 +6,26 @@
 #include "../util.h"
 
 #if defined(__linux__)
+	#include <inttypes.h>
+	#include <stdint.h>
+
 	const char *
 	cpu_freq(void)
 	{
-		int freq;
+		uint64_t freq;
 
-		return (pscanf("/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq",
-		               "%i", &freq) == 1) ?
-		       bprintf("%d", (freq + 500) / 1000) : NULL;
+		/* in kHz */
+		if (pscanf("/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq",
+		            "%"SCNu64, &freq) != 1) {
+			return NULL;
+		}
+
+		return fmt_human(freq * 1000, 1000);
 	}
 
 	const char *
 	cpu_perc(void)
 	{
-		static int valid;
 		static long double a[7];
 		long double b[7];
 
@@ -29,8 +35,7 @@
 		           &a[0], &a[1], &a[2], &a[3], &a[4], &a[5], &a[6]) != 7) {
 			return NULL;
 		}
-		if (!valid) {
-			valid = 1;
+		if (b[0] == 0) {
 			return NULL;
 		}
 
@@ -56,19 +61,19 @@
 
 		size = sizeof(freq);
 
+		/* in MHz */
 		if (sysctl(mib, 2, &freq, &size, NULL, 0) < 0) {
-			fprintf(stderr, "sysctl 'HW_CPUSPEED': %s\n", strerror(errno));
+			warn("sysctl 'HW_CPUSPEED':");
 			return NULL;
 		}
 
-		return bprintf("%d", freq);
+		return fmt_human((size_t)freq * 1000 * 1000, 1000);
 	}
 
 	const char *
 	cpu_perc(void)
 	{
 		int mib[2];
-		static int valid;
 		static long int a[CPUSTATES];
 		long int b[CPUSTATES];
 		size_t size;
@@ -80,11 +85,10 @@
 
 		memcpy(b, a, sizeof(b));
 		if (sysctl(mib, 2, &a, &size, NULL, 0) < 0) {
-			fprintf(stderr, "sysctl 'KERN_CPTIME': %s\n", strerror(errno));
+			warn("sysctl 'KERN_CPTIME':");
 			return NULL;
 		}
-		if (!valid) {
-			valid = 1;
+		if (b[0] == 0) {
 			return NULL;
 		}
 

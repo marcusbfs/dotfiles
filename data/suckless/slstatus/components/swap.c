@@ -13,11 +13,11 @@
 		size_t bytes_read;
 
 		if (!(fp = fopen(path, "r"))) {
-			fprintf(stderr, "fopen '%s': %s\n", path, strerror(errno));
+			warn("fopen '%s':", path);
 			return 0;
 		}
 		if (!(bytes_read = fread(buf, sizeof(char), bufsiz, fp))) {
-			fprintf(stderr, "fread '%s': %s\n", path, strerror(errno));
+			warn("fread '%s':", path);
 			fclose(fp);
 			return 0;
 		}
@@ -48,7 +48,7 @@
 		}
 		sscanf(match, "SwapFree: %ld kB\n", &free);
 
-		return bprintf("%f", (float)free / 1024 / 1024);
+		return fmt_human(free * 1024, 1024);
 	}
 
 	const char *
@@ -76,6 +76,10 @@
 		}
 		sscanf(match, "SwapFree: %ld kB\n", &free);
 
+		if (total == 0) {
+			return NULL;
+		}
+
 		return bprintf("%d", 100 * (total - free - cached) / total);
 	}
 
@@ -94,7 +98,7 @@
 		}
 		sscanf(match, "SwapTotal: %ld kB\n", &total);
 
-		return bprintf("%f", (float)total / 1024 / 1024);
+		return fmt_human(total * 1024, 1024);
 	}
 
 	const char *
@@ -122,7 +126,7 @@
 		}
 		sscanf(match, "SwapFree: %ld kB\n", &free);
 
-		return bprintf("%f", (float)(total - free - cached) / 1024 / 1024);
+		return fmt_human((total - free - cached) * 1024, 1024);
 	}
 #elif defined(__OpenBSD__)
 	#include <stdlib.h>
@@ -139,21 +143,21 @@
 
 		nswap = swapctl(SWAP_NSWAP, 0, 0);
 		if (nswap < 1) {
-			fprintf(stderr, "swaptctl 'SWAP_NSWAP': %s\n", strerror(errno));
+			warn("swaptctl 'SWAP_NSWAP':");
 		}
 
 		fsep = sep = calloc(nswap, sizeof(*sep));
 		if (!sep) {
-			fprintf(stderr, "calloc 'nswap': %s\n", strerror(errno));
+			warn("calloc 'nswap':");
 		}
 
 		rnswap = swapctl(SWAP_STATS, (void *)sep, nswap);
 		if (rnswap < 0) {
-			fprintf(stderr, "swapctl 'SWAP_STATA': %s\n", strerror(errno));
+			warn("swapctl 'SWAP_STATA':");
 		}
 
 		if (nswap != rnswap) {
-			fprintf(stderr, "SWAP_STATS != SWAP_NSWAP\n");
+			warn("getstats: SWAP_STATS != SWAP_NSWAP");
 		}
 
 		*total = 0;
@@ -174,7 +178,7 @@
 
 		getstats(&total, &used);
 
-		return bprintf("%f", (float)(total - used) / 1024 / 1024);
+		return fmt_human((total - used) * 1024, 1024);
 	}
 
 	const char *
@@ -183,6 +187,10 @@
 		int total, used;
 
 		getstats(&total, &used);
+
+		if (total == 0) {
+			return NULL;
+		}
 
 		return bprintf("%d", 100 * used / total);
 	}
@@ -194,7 +202,7 @@
 
 		getstats(&total, &used);
 
-		return bprintf("%f", (float)total / 1024 / 1024);
+		return fmt_human(total * 1024, 1024);
 	}
 
 	const char *
@@ -204,6 +212,6 @@
 
 		getstats(&total, &used);
 
-		return bprintf("%f", (float)used / 1024 / 1024);
+		return fmt_human(used * 1024, 1024);
 	}
 #endif

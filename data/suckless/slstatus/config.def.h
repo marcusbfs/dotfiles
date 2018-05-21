@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
 /* interval between updates (in ms) */
-static const int interval = 1000;
+const unsigned int interval = 1000;
 
 /* text to show if no value can be retrieved */
 static const char unknown_str[] = "n/a";
@@ -13,9 +13,12 @@ static const char unknown_str[] = "n/a";
  * function             description                     argument (example)
  *
  * battery_perc         battery percentage              battery name (BAT0)
+ *                                                      NULL on OpenBSD
  * battery_state        battery charging state          battery name (BAT0)
+ *                                                      NULL on OpenBSD
+ * battery_remaining    battery remaining HH:MM         battery name (BAT0)
+ *                                                      NULL on OpenBSD
  * cpu_perc             cpu usage in percent            NULL
- * cpu_iowait           cpu iowait in percent           NULL
  * cpu_freq             cpu frequency in MHz            NULL
  * datetime             date and time                   format string (%F %T)
  * disk_free            free disk space in GB           mountpoint path (/)
@@ -29,8 +32,9 @@ static const char unknown_str[] = "n/a";
  * ipv6                 IPv6 address                    interface name (eth0)
  * kernel_release       `uname -r`                      NULL
  * keyboard_indicators  caps/num lock indicators        NULL
- * load_avg             load average                    format string
- *                                                      (%.2f %.2f %.2f)
+ * load_avg             load average                    NULL
+ * netspeed_rx          receive network speed           interface name (wlan0)
+ * netspeed_tx          transfer network speed          interface name (wlan0)
  * num_files            number of files in a directory  path
  *                                                      (/home/foo/Inbox/cur)
  * ram_free             free memory in GB               NULL
@@ -44,6 +48,7 @@ static const char unknown_str[] = "n/a";
  * swap_used            used swap in GB                 NULL
  * temp                 temperature in degree celsius   sensor file
  *                                                      (/sys/class/thermal/...)
+ *                                                      NULL on OpenBSD
  * uid                  UID of current user             NULL
  * uptime               system uptime                   NULL
  * username             username of current user        NULL
@@ -55,7 +60,7 @@ static const struct arg args[] = {
 	/* function, format,        argument */
 	{ cpu_perc, "| CPU%3s%% ", NULL    },
 	{ ram_perc, "| RAM %2s%% ", NULL    },
-	//{ disk_free, "| HD %1s ", "/"    },
-	{ run_command, "| /: %s ", "echo $(df -h | grep -w '/' | awk '{printf $4}')" },
+	{ disk_free, "| /: %0s ", "/"    },
+	//{ run_command, "| /: %s ", "echo $(df -h | grep -w '/' | awk '{printf $4}')" },
 	{ datetime, "| %s |", "%a %b %d %T" },
 };

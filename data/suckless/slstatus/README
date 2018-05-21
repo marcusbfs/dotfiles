@@ -6,7 +6,7 @@ slstatus is a suckless status monitor for window managers that use WM_NAME
 
 Features
 --------
-- Battery percentage/state
+- Battery percentage/state/time left
 - CPU usage
 - CPU frequency
 - Custom shell commands
@@ -19,6 +19,7 @@ Features
 - Kernel version
 - Keyboard indicators
 - Load average
+- Network speeds (RX and TX)
 - Number of files in a directory (hint: Maildir)
 - Memory status (free memory, percentage, total memory and used memory)
 - Swap status (free swap, percentage, total swap and used swap)
