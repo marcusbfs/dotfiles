@@ -90,6 +90,7 @@ static Key keys[] = {
     {  MODKEY,              XK_Print,  spawn,  ESHCMD("gnome-screenshot --interactive")       },
     {  MODKEY,              XK_Insert, spawn,  ESHCMD("clipmenu")       },
     {  MODKEY,              XK_s,      spawn,  SHCMD("read -r X Y W H < <(slop -f '%x %y %w %h' -b 1 -t 0 -q); (( W     /= 8   )); (( H /= 16   )); g=${W}x${H}+${X}+${Y}; st -c st-float -g $g") },
+    {  MODKEY,              XK_c,      spawn,  SHCMD("wine $HOME/workspace/outros/dotfiles/data/Flat50G/Calculator/Emu48.exe") },
     {  0,                   XF86XK_AudioPlay,  spawn,  ESHCMD("mpc toggle")  },
     {  0,                   XF86XK_AudioStop,  spawn,  ESHCMD("mpc stop")  },
     {  0,                   XF86XK_AudioNext,  spawn,  ESHCMD("mpc next")  },

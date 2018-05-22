@@ -305,7 +305,7 @@ bind-key M-t run-shell "cut -c3- ~/.tmux.conf.local | bash -s _watch_tsp_layout"
 # export LC_NUMERIC=C
 #
 # _music_layout() {
-#   tmux new-window -n music "ncmpcpp && tmux kill-window"
+#   tmux new-window -n music "mpd; ncmpcpp && killall mpd && tmux kill-window"
 #   #tmux send-keys -t .1 'ncmpcpp && tmux kill-window' C-m
 #   tmux splitw
 #   tmux send-keys -t .2 'sleep .1 && lyvi' C-m
