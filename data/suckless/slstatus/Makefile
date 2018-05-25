@@ -6,6 +6,7 @@ include config.mk
 
 REQ = util
 COM =\
+	components/backlight\
 	components/battery\
 	components/cpu\
 	components/datetime\
@@ -15,7 +16,9 @@ COM =\
 	components/ip\
 	components/kernel_release\
 	components/keyboard_indicators\
+	components/keymap\
 	components/load_avg\
+	components/netspeeds\
 	components/num_files\
 	components/ram\
 	components/run_command\

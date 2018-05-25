@@ -12,6 +12,8 @@ static const char unknown_str[] = "n/a";
 /*
  * function             description                     argument (example)
  *
+ * backlight_perc       backlight percentage            device name
+ *                                                      (intel_backlight)
  * battery_perc         battery percentage              battery name (BAT0)
  *                                                      NULL on OpenBSD
  * battery_state        battery charging state          battery name (BAT0)
@@ -32,6 +34,8 @@ static const char unknown_str[] = "n/a";
  * ipv6                 IPv6 address                    interface name (eth0)
  * kernel_release       `uname -r`                      NULL
  * keyboard_indicators  caps/num lock indicators        NULL
+ * keymap               layout (variant) of current     NULL
+ *                      keymap
  * load_avg             load average                    NULL
  * netspeed_rx          receive network speed           interface name (wlan0)
  * netspeed_tx          transfer network speed          interface name (wlan0)

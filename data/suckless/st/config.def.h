@@ -84,7 +84,7 @@ char *termname = "xterm-256color";
 unsigned int tabspaces = 8;
 
 /* Terminal colors (16 first used in escape sequence) */
-#include "themes/orange-black.c"
+#include "themes/red-planet.c"
 
 /*
  * Default shape of cursor

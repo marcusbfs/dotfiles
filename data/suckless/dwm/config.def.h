@@ -16,7 +16,7 @@ static const int viewontag          = 1;     /* Switch view on tag switch */
 static const char *fonts[]          = { SAME_FONT };
 static const char dmenufont[]       = SAME_FONT;
 
-#include "themes/strox.c"
+#include "themes/red-planet.c"
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
