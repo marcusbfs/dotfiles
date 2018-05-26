@@ -6,6 +6,9 @@
 #include <string.h>
 #include <strings.h>
 #include <time.h>
+#ifdef __OpenBSD__
+#include <unistd.h>
+#endif
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
@@ -871,6 +874,11 @@ main(int argc, char *argv[])
 	if (!drw_fontset_create(drw, fonts, LENGTH(fonts)))
 		die("no fonts could be loaded.");
 	lrpad = drw->fonts->h;
+
+#ifdef __OpenBSD__
+	if (pledge("stdio rpath", NULL) == -1)
+		die("pledge");
+#endif
 
 	if (fast) {
 		grabkeyboard();

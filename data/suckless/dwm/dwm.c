@@ -2694,6 +2694,10 @@ main(int argc, char *argv[])
     on_start();
 	checkotherwm();
 	setup();
+#ifdef __OpenBSD__
+	if (pledge("stdio proc exec", NULL) == -1)
+		die("pledge");
+#endif /* __OpenBSD__ */
 	scan();
 	run();
 	cleanup();
