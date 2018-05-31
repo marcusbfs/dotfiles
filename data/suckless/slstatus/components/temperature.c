@@ -16,9 +16,7 @@
 		return bprintf("%d", temp / 1000);
 	}
 #elif defined(__OpenBSD__)
-	#include <errno.h>
 	#include <stdio.h>
-	#include <string.h>
 	#include <sys/time.h> /* before <sys/sensors.h> for struct timeval */
 	#include <sys/sensors.h>
 	#include <sys/sysctl.h>
@@ -44,6 +42,6 @@
 		}
 
 		/* kelvin to celsius */
-		return bprintf("%d", (temp.value - 273150000) / 1000000);
+		return bprintf("%d", (temp.value - 273150000) / 1E6);
 	}
 #endif
