@@ -5,9 +5,9 @@ set $mod Mod4
 
 ###--- i3-gaps ---###
 hide_edge_borders both
-for_window [class="^.*"] "border pixel 1"
-set $gi 8
-set $go 5
+for_window [class="^.*"] "border pixel 5"
+set $gi 0
+set $go 0
 gaps inner $gi
 gaps outer $go
 set $mode_gaps Toggle gaps: (1) on (2) off
@@ -46,41 +46,38 @@ client.urgent $base01 $base01 $base05 $base00
 
 ###--- Configurações básicas ---###
 floating_modifier $mod
-set $term urxvt
+set $term st
 set $browser firefox
 set $flash --no-startup-id "cut -c3- $HOME/.config/i3/config | bash -s _blink_window"
 font pango:Monospace, DejaVu Sans Mono 12
 
 ###--- Inicialização ---###
 exec_always --no-startup-id "cut -c3- $HOME/.config/i3/config | bash -s _polybar_launcher"
-exec_always --no-startup-id "cut -c3- $HOME/.config/i3/config | bash -s _polybar_launcher"
-# https://github.com/olemartinorg/i3-alternating-layout
-exec --no-startup-id $HOME/.scripts/bin/alternating_layouts.py
-exec --no-startup-id "bash $HOME/.startup-apps"
 
 ###--- Scripts shortcuts ---###
 #exec --no-startup-id "cut -c3- $HOME/.config/i3/config | bash -s _compton_launcher"
 # Script que sincroniza zshrc e ranger.rc
-exec_always --no-startup-id python $HOME/.scripts/syncaf.py
+#exec_always --no-startup-id python $HOME/.scripts/syncaf.py
 
 
 ###--- Shortcuts ---###
 bindsym $mod+Return exec $term
-bindsym $mod+m exec $term -e ncmpcpp
-bindsym $mod+Shift+Return exec $term -e tmux
+bindsym $mod+r exec $term -e ranger
+#bindsym $mod+m exec $term -e ncmpcpp
+#bindsym $mod+Shift+Return exec $term -e tmux
 bindsym $mod+Tab workspace back_and_forth
 
 # Testes com dois monitores
 bindsym $mod+Shift+m move workspace to output left
 
 # Atalhos com letras
-bindsym $mod+Shift+Print exec --no-startup-id screenkey
+#bindsym $mod+Shift+Print exec --no-startup-id screenkey
 bindsym $mod+Print exec --no-startup-id "cut -c3- $HOME/.config/i3/config | bash -s _screenshooter"
-bindsym $mod+a exec --no-startup-id "wine $HOME/workspace/outros/dotfiles/data/Flat50G/Calculator/Emu48.exe"
-bindsym $mod+x exec emacs
+bindsym $mod+c exec --no-startup-id "wine $HOME/workspace/outros/dotfiles/data/Flat50G/Calculator/Emu48.exe"
+#bindsym $mod+x exec emacs
 bindsym $mod+Shift+x exec --no-startup-id "cut -c3- $HOME/.config/i3/config | bash -s _simple_lock"
-bindsym $mod+p exec $flash
-bindsym $mod+g exec --no-startup-id "cut -c3- $HOME/.config/i3/config | bash -s _play_ytmpv"
+bindsym $mod+p exec --no-startup-id dmenu
+#bindsym $mod+g exec --no-startup-id "cut -c3- $HOME/.config/i3/config | bash -s _play_ytmpv"
 
 bindsym $mod+Shift+y resize shrink width 10 px or 10ppt
 bindsym $mod+Shift+u resize grow height 10 px or 10 ppt
@@ -96,7 +93,7 @@ bindsym $mod+F7 exec transset-df -a --dec .15
 bindsym $mod+F8 exec transset-df -a --inc .15
 
 # rofi
-bindsym $mod+d exec rofi -show run -show-icons -matching fuzzy
+#bindsym $mod+d exec rofi -show run -show-icons -matching fuzzy
 
 # change focus
 bindsym $mod+h focus left
@@ -156,12 +153,13 @@ set $ws0 "10"
 
 ###--- Regras ---###
 for_window [class="Arandr"] "floating enable"
+for_window [class="st-float"] "floating enable"
 for_window [class="mpv"] "floating enable"
-for_window [class="^Firefox$"] "border none"
-for_window [class="^Vlc$"] "border none,focus"
 # Abrir em tal container
 assign [class="^Firefox$"] $ws2
 assign [class="^Vlc$"] $ws3
+assign [class="^mpv$"] $ws3
+assign [class="^Emacs$"] $ws9
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1

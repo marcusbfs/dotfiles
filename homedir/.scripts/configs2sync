@@ -15,3 +15,4 @@ cf-spacemacs ~/.spacemacs
 cf-mpd-conf ~/.config/mpd/mpd.conf
 cf-ncmpcpp-config ~/.ncmpcpp/config
 cf-compton ~/.config/compton.conf
+cf-i3 ~/.config/i3/config
