@@ -17,6 +17,6 @@ vim "$tmpfile" && new_name="$(cat $tmpfile)"
 
 #echo "$old_name -> $new_name"
 
-mv -i $old_name $new_name
+mv -vi $old_name $new_name
 
 trap finish EXIT
