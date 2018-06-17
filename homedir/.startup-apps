@@ -22,5 +22,6 @@ python $HOME/.scripts/syncaf.py &
 xset -b
 xset s off -dpms
 compton &
-emacs $HOME/Dropbox/Pessoal/GTD/GTD.org &
+#emacs $HOME/Dropbox/Pessoal/GTD/GTD.org &
 firefox &
+st &
