@@ -673,6 +673,8 @@ cresize(int width, int height)
 
 	col = (win.w - 2 * borderpx) / win.cw;
 	row = (win.h - 2 * borderpx) / win.ch;
+	col = MAX(1, col);
+	row = MAX(1, row);
 
 	tresize(col, row);
 	xresize(col, row);
@@ -682,8 +684,8 @@ cresize(int width, int height)
 void
 xresize(int col, int row)
 {
-	win.tw = MAX(1, col * win.cw);
-	win.th = MAX(1, row * win.ch);
+	win.tw = col * win.cw;
+	win.th = row * win.ch;
 
 	XFreePixmap(xw.dpy, xw.buf);
 	xw.buf = XCreatePixmap(xw.dpy, xw.win, win.w, win.h,
@@ -789,15 +791,17 @@ xhints(void)
 
 	sizeh = XAllocSizeHints();
 
-	sizeh->flags = PSize | PResizeInc | PBaseSize;
+	sizeh->flags = PSize | PResizeInc | PBaseSize | PMinSize;
 	sizeh->height = win.h;
 	sizeh->width = win.w;
 	sizeh->height_inc = win.ch;
 	sizeh->width_inc = win.cw;
 	sizeh->base_height = 2 * borderpx;
 	sizeh->base_width = 2 * borderpx;
+	sizeh->min_height = win.ch + 2 * borderpx;
+	sizeh->min_width = win.cw + 2 * borderpx;
 	if (xw.isfixed) {
-		sizeh->flags |= PMaxSize | PMinSize;
+		sizeh->flags |= PMaxSize;
 		sizeh->min_width = sizeh->max_width = win.w;
 		sizeh->min_height = sizeh->max_height = win.h;
 	}
@@ -1416,25 +1420,21 @@ xdrawcursor(int cx, int cy, Glyph g, int ox, int oy, Glyph og)
 	 */
 	g.mode &= ATTR_BOLD|ATTR_ITALIC|ATTR_UNDERLINE|ATTR_STRUCK|ATTR_WIDE;
 
-	if (IS_SET(MODE_REVERSE)) {
-		g.mode |= ATTR_REVERSE;
-		g.bg = defaultfg;
-		if (selected(cx, cy)) {
-			drawcol = dc.col[defaultcs];
-			g.fg = defaultrcs;
-		} else {
-			drawcol = dc.col[defaultrcs];
-			g.fg = defaultcs;
-		}
-	} else {
-		if (selected(cx, cy)) {
-			g.fg = defaultfg;
-			g.bg = defaultrcs;
-		} else {
-			g.fg = defaultbg;
-			g.bg = defaultcs;
-		}
+	if (selected(cx, cy)) {
 		drawcol = dc.col[g.bg];
+	} else {
+		g.mode |= ATTR_REVERSE;
+
+		if (g.mode & ATTR_BOLD && BETWEEN(g.fg, 0, 7))
+			drawcol = dc.col[g.fg + 8];
+		else
+			drawcol = dc.col[g.fg];
+	}
+
+	if (IS_SET(MODE_REVERSE)) {
+		drawcol.color.red = ~drawcol.color.red;
+		drawcol.color.green = ~drawcol.color.green;
+		drawcol.color.blue = ~drawcol.color.blue;
 	}
 
 	/* draw the new one */

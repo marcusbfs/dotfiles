@@ -4,15 +4,17 @@
 #include "../util.h"
 
 #if defined(__linux__)
+	#include <stdint.h>
+
 	const char *
 	ram_free(void)
 	{
-		long free;
+		uintmax_t free;
 
 		if (pscanf("/proc/meminfo",
-		           "MemTotal: %ld kB\n"
-		           "MemFree: %ld kB\n"
-		           "MemAvailable: %ld kB\n",
+		           "MemTotal: %ju kB\n"
+		           "MemFree: %ju kB\n"
+		           "MemAvailable: %ju kB\n",
 		           &free, &free, &free) != 3) {
 			return NULL;
 		}
@@ -23,28 +25,33 @@
 	const char *
 	ram_perc(void)
 	{
-		long total, free, buffers, cached;
+		uintmax_t total, free, buffers, cached;
 
 		if (pscanf("/proc/meminfo",
-		           "MemTotal: %ld kB\n"
-		           "MemFree: %ld kB\n"
-		           "MemAvailable: %ld kB\nBuffers: %ld kB\n"
-		           "Cached: %ld kB\n",
+		           "MemTotal: %ju kB\n"
+		           "MemFree: %ju kB\n"
+		           "MemAvailable: %ju kB\n"
+		           "Buffers: %ju kB\n"
+		           "Cached: %ju kB\n",
 		           &total, &free, &buffers, &buffers, &cached) != 5) {
 			return NULL;
 		}
 
-		return bprintf("%d", 100 * ((total - free) -
-		                            (buffers + cached)) / total);
+		if (total == 0) {
+			return NULL;
+		}
+
+		return bprintf("%d", 100 * ((total - free) - (buffers + cached))
+                               / total);
 	}
 
 	const char *
 	ram_total(void)
 	{
-		long total;
+		uintmax_t total;
 
-		if (pscanf("/proc/meminfo", "MemTotal: %ld kB\n",
-		           &total) != 1) {
+		if (pscanf("/proc/meminfo", "MemTotal: %ju kB\n", &total)
+		    != 1) {
 			return NULL;
 		}
 
@@ -54,13 +61,14 @@
 	const char *
 	ram_used(void)
 	{
-		long total, free, buffers, cached;
+		uintmax_t total, free, buffers, cached;
 
 		if (pscanf("/proc/meminfo",
-		           "MemTotal: %ld kB\n"
-		           "MemFree: %ld kB\n"
-		           "MemAvailable: %ld kB\nBuffers: %ld kB\n"
-		           "Cached: %ld kB\n",
+		           "MemTotal: %ju kB\n"
+		           "MemFree: %ju kB\n"
+		           "MemAvailable: %ju kB\n"
+		           "Buffers: %ju kB\n"
+		           "Cached: %ju kB\n",
 		           &total, &free, &buffers, &buffers, &cached) != 5) {
 			return NULL;
 		}
@@ -74,7 +82,7 @@
 	#include <sys/types.h>
 	#include <unistd.h>
 
-	#define LOG1024 	10
+	#define LOG1024 10
 	#define pagetok(size, pageshift) (size_t)(size << (pageshift - LOG1024))
 
 	inline int

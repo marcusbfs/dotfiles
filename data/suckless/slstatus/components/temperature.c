@@ -4,16 +4,18 @@
 #include "../util.h"
 
 #if defined(__linux__)
+	#include <stdint.h>
+
 	const char *
 	temp(const char *file)
 	{
-		int temp;
+		uintmax_t temp;
 
-		if(pscanf(file, "%d", &temp) != 1) {
+		if (pscanf(file, "%ju", &temp) != 1) {
 			return NULL;
 		}
 
-		return bprintf("%d", temp / 1000);
+		return bprintf("%ju", temp / 1000);
 	}
 #elif defined(__OpenBSD__)
 	#include <stdio.h>

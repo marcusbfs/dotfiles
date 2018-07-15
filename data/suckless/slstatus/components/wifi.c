@@ -13,18 +13,17 @@
 	#include <linux/wireless.h>
 
 	const char *
-	wifi_perc(const char *iface)
+	wifi_perc(const char *interface)
 	{
-		int i, cur;
-		int total = 70; /* the max of /proc/net/wireless */
+		int cur;
+		size_t i;
 		char *p, *datastart;
 		char path[PATH_MAX];
 		char status[5];
 		FILE *fp;
 
-		if (esnprintf(path, sizeof(path),
-		              "/sys/class/net/%s/operstate",
-		              iface) < 0) {
+		if (esnprintf(path, sizeof(path), "/sys/class/net/%s/operstate",
+		              interface) < 0) {
 			return NULL;
 		}
 		if (!(fp = fopen(path, "r"))) {
@@ -33,7 +32,7 @@
 		}
 		p = fgets(status, 5, fp);
 		fclose(fp);
-		if(!p || strcmp(status, "up\n") != 0) {
+		if (!p || strcmp(status, "up\n") != 0) {
 			return NULL;
 		}
 
@@ -51,19 +50,20 @@
 			return NULL;
 		}
 
-		if (!(datastart = strstr(buf, iface))) {
+		if (!(datastart = strstr(buf, interface))) {
 			return NULL;
 		}
 
-		datastart = (datastart+(strlen(iface)+1));
+		datastart = (datastart+(strlen(interface)+1));
 		sscanf(datastart + 1, " %*d   %d  %*d  %*d\t\t  %*d\t   "
 		       "%*d\t\t%*d\t\t %*d\t  %*d\t\t %*d", &cur);
 
-		return bprintf("%d", (int)((float)cur / total * 100));
+		/* 70 is the max of /proc/net/wireless */
+		return bprintf("%d", (int)((float)cur / 70 * 100));
 	}
 
 	const char *
-	wifi_essid(const char *iface)
+	wifi_essid(const char *interface)
 	{
 		static char id[IW_ESSID_MAX_SIZE+1];
 		int sockfd;
@@ -71,8 +71,8 @@
 
 		memset(&wreq, 0, sizeof(struct iwreq));
 		wreq.u.essid.length = IW_ESSID_MAX_SIZE+1;
-		if (esnprintf(wreq.ifr_name, sizeof(wreq.ifr_name),
-		              "%s", iface) < 0) {
+		if (esnprintf(wreq.ifr_name, sizeof(wreq.ifr_name), "%s",
+		              interface) < 0) {
 			return NULL;
 		}
 
@@ -105,10 +105,11 @@
 	#include <sys/types.h>
 
 	static int
-	load_ieee80211_nodereq(const char *iface, struct ieee80211_nodereq *nr)
+	load_ieee80211_nodereq(const char *interface, struct ieee80211_nodereq *nr)
 	{
 		struct ieee80211_bssid bssid;
 		int sockfd;
+		uint8_t zero_bssid[IEEE80211_ADDR_LEN];
 
 		memset(&bssid, 0, sizeof(bssid));
 		memset(nr, 0, sizeof(struct ieee80211_nodereq));
@@ -116,13 +117,19 @@
 			warn("socket 'AF_INET':");
 			return 0;
 		}
-		strlcpy(bssid.i_name, iface, sizeof(bssid.i_name));
+		strlcpy(bssid.i_name, interface, sizeof(bssid.i_name));
 		if ((ioctl(sockfd, SIOCG80211BSSID, &bssid)) < 0) {
 			warn("ioctl 'SIOCG80211BSSID':");
 			close(sockfd);
 			return 0;
 		}
-		strlcpy(nr->nr_ifname, iface, sizeof(nr->nr_ifname));
+		memset(&zero_bssid, 0, sizeof(zero_bssid));
+		if (memcmp(bssid.i_bssid, zero_bssid,
+		    IEEE80211_ADDR_LEN) == 0) {
+			close(sockfd);
+			return 0;
+		}
+		strlcpy(nr->nr_ifname, interface, sizeof(nr->nr_ifname));
 		memcpy(&nr->nr_macaddr, bssid.i_bssid, sizeof(nr->nr_macaddr));
 		if ((ioctl(sockfd, SIOCG80211NODE, nr)) < 0 && nr->nr_rssi) {
 			warn("ioctl 'SIOCG80211NODE':");
@@ -134,17 +141,18 @@
 	}
 
 	const char *
-	wifi_perc(const char *iface)
+	wifi_perc(const char *interface)
 	{
 		struct ieee80211_nodereq nr;
 		int q;
 
-		if (load_ieee80211_nodereq(iface, &nr)) {
+		if (load_ieee80211_nodereq(interface, &nr)) {
 			if (nr.nr_max_rssi) {
 				q = IEEE80211_NODEREQ_RSSI(&nr);
 			} else {
-				q = nr.nr_rssi >= -50 ? 100 : (nr.nr_rssi <= -100 ? 0 :
-				(2 * (nr.nr_rssi + 100)));
+				q = nr.nr_rssi >= -50 ? 100 :
+				    (nr.nr_rssi <= -100 ? 0 :
+				    (2 * (nr.nr_rssi + 100)));
 			}
 			return bprintf("%d", q);
 		}
@@ -153,11 +161,11 @@
 	}
 
 	const char *
-	wifi_essid(const char *iface)
+	wifi_essid(const char *interface)
 	{
 		struct ieee80211_nodereq nr;
 
-		if (load_ieee80211_nodereq(iface, &nr)) {
+		if (load_ieee80211_nodereq(interface, &nr)) {
 			return bprintf("%s", nr.nr_nwid);
 		}
 
