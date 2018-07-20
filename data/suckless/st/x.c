@@ -1406,7 +1406,6 @@ void
 xdrawcursor(int cx, int cy, Glyph g, int ox, int oy, Glyph og)
 {
 	Color drawcol;
-	uint32_t cc;
 
 	/* remove the old cursor */
 	if (selected(ox, oy))
@@ -1421,29 +1420,25 @@ xdrawcursor(int cx, int cy, Glyph g, int ox, int oy, Glyph og)
 	 */
 	g.mode &= ATTR_BOLD|ATTR_ITALIC|ATTR_UNDERLINE|ATTR_STRUCK|ATTR_WIDE;
 
-	if (selected(cx, cy)) {
-		cc = g.bg;
-	} else {
-		g.mode |= ATTR_REVERSE;
-		if (g.mode & ATTR_BOLD && BETWEEN(g.fg, 0, 7))
-			cc = g.fg + 8;
-		else
-			cc = g.fg;
-	}
-
-	if (IS_TRUECOL(cc)) {
-		drawcol.color.alpha = 0xffff;
-		drawcol.color.red = TRUERED(cc);
-		drawcol.color.green = TRUEGREEN(cc);
-		drawcol.color.blue = TRUEBLUE(cc);
-	} else {
-		drawcol = dc.col[cc];
-	}
-
 	if (IS_SET(MODE_REVERSE)) {
-		drawcol.color.red = ~drawcol.color.red;
-		drawcol.color.green = ~drawcol.color.green;
-		drawcol.color.blue = ~drawcol.color.blue;
+		g.mode |= ATTR_REVERSE;
+		g.bg = defaultfg;
+		if (selected(cx, cy)) {
+			drawcol = dc.col[defaultcs];
+			g.fg = defaultrcs;
+		} else {
+			drawcol = dc.col[defaultrcs];
+			g.fg = defaultcs;
+		}
+	} else {
+		if (selected(cx, cy)) {
+			g.fg = defaultfg;
+			g.bg = defaultrcs;
+		} else {
+			g.fg = defaultbg;
+			g.bg = defaultcs;
+		}
+		drawcol = dc.col[g.bg];
 	}
 
 	/* draw the new one */
