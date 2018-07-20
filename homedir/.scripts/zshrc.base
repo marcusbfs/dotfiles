@@ -77,9 +77,7 @@ alias r="ranger"
 alias ytmpv="mpv --ontop --no-border --volume=50 --force-window --autofit=600x380 --geometry=-15-15"
 alias ytdlhq="youtube-dl -f bestvideo+bestaudio"
 alias svh="sudo $EDITOR /etc/hosts"
-alias wine-maple="wine ~/.wine/drive_c/Program\ Files/Maple\ 17/bin.X86_64_WINDOWS/maplew.exe"
-alias wine-steam="wine ~/.wine/drive_c/Program\ Files\ \(x86\)/Steam/Steam.exe -no-cef-sandbox"
-alias wine-excel2010="WINEPREFIX=\"${HOME}/.msoffice2010\" WINEARCH=\"win32\" wine ~/.msoffice2010/drive_c/Program\ Files/Microsoft\ Office/Office14/EXCEL.EXE"
+alias wine-evernote="wine ~/.wine/drive_c/Program\ Files\ \(x86\)/Evernote/Evernote/Evernote.exe"
 alias temacs="emacs -nw"
 
 # Iniciar com tmux
