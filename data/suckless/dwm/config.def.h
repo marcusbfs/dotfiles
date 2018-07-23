@@ -27,12 +27,13 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Emacs",        NULL,       NULL,       1 << 8,       0,           -1 },
-	{ "Firefox",      NULL,       NULL,       1 << 1,       0,           -1 },
-	{ "Vlc",          NULL,       NULL,       1 << 2,       0,           -1 },
-	{ "mpv",          NULL,       NULL,       1 << 2,       1,           -1 },
-	{ "qutebrowser",  NULL,       NULL,       1 << 1,       0,           -1 },
-	{ "st-float",     NULL,       NULL,            0,       1,           -1 },
+	{ "Emacs",         NULL,       NULL,       1 << 8,       0,           -1 },
+	{ "Firefox",       NULL,       NULL,       1 << 1,       0,           -1 },
+	{ "Google-chrome", NULL,       NULL,       1 << 1,       0,           -1 },
+	{ "Vlc",           NULL,       NULL,       1 << 2,       0,           -1 },
+	{ "mpv",           NULL,       NULL,       1 << 2,       1,           -1 },
+	{ "qutebrowser",   NULL,       NULL,       1 << 1,       0,           -1 },
+	{ "st-float",      NULL,       NULL,            0,       1,           -1 },
 };
 
 /* layout(s) */

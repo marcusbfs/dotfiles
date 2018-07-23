@@ -23,5 +23,5 @@ xset -b
 xset s off -dpms
 compton &
 #emacs $HOME/Dropbox/Pessoal/GTD/GTD.org &
-firefox &
+google-chrome-stable &
 st &
