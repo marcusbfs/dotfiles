@@ -27,7 +27,7 @@ def main():
     )
     inst('redshift-gtk-git mupdf ncdu htop mpd ncmpcpp lyvi-git mpc vim')
     inst(
-        'keepassxc gnome-screenshot gnome-keyring neofetch ncpamixer unclutter-xfixes-git'
+        'keepassxc gnome-screenshot gnome-keyring neofetch ncpamixer unclutter-xfixes-git maim'
     )
     inst(
         'mpv qt4 task-spooler transmission-cli transmission-remote-cli-git youtube-dl-git'

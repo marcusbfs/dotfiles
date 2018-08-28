@@ -21,7 +21,7 @@ set -x
 inst terminus-font-ll2-td1 proggyfonts ttf-dejavu
 inst udiskie feh sxiv-git sxiv-rifle tmux-git rsync silver-searcher-git ranger-git
 inst redshift-gtk-git mupdf ncdu htop mpd ncmpcpp lyvi-git mpc vim
-inst keepassxc gnome-screenshot gnome-keyring neofetch ncpamixer unclutter-xfixes-git
+inst keepassxc gnome-screenshot gnome-keyring neofetch ncpamixer unclutter-xfixes-git maim
 inst mpv qt4 task-spooler transmission-cli transmission-remote-cli-git youtube-dl-git
 inst pulseaudio pulseaudio-alsa alsa-lib alsa-plugins alsa-utils
 inst xsel xclip
